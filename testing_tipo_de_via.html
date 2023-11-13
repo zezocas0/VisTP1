@@ -6,12 +6,25 @@
         <script src="http://d3js.org/d3.v6.js"></script>
         <script>
         // com base no exemplo 3.2 de as aulas.
-        let width = 500;
-        let height = 300;
-        let margin = 50;
-        
-        function draw(data) {
-            let w = 500, h = 400;
+        let width = 1800;
+        let height = 1080;
+        let margin = 100;
+        //function draw(data){
+        //      
+        //      
+        //      
+        //d3.select("#TotalorOthersButton").on("click", function(e,d) {
+        //    //either draw total or all others together
+        //    
+        //})
+       //
+        //}
+
+
+
+
+        function draw_acidentes_total_via(data) {
+            let w = 1000, h = 600; // width and height
             
             let svg = d3.select('body').append('svg')
             .attr('width', w)
@@ -21,20 +34,21 @@
             // The scale does not have extent, as it need all the values
             let x_extent = data.map(d => d.Ano);
             let x_scale = d3.scalePoint()
-                .range([width - margin, margin])
+                .range([  margin ,w- margin])
                 .domain(x_extent);
                 
-            let y_extent = d3.extent(data, d => d.Numero_de_Alunos);
+            let y_extent = d3.extent(data, d => d.Total);
             let y_scale = d3.scaleLinear()
-            .range([height - margin, margin])
+            .range([h - margin, margin])
             .domain([0, y_extent[1]]);
             
-            let circles = svg.selectAll("circle")
+            let circles_Total = svg.selectAll("circle")
             .data(data)
             .join("circle")
             .attr("cx", d => x_scale(d.Ano))
-            .attr("cy", d => y_scale(d.Numero_de_Alunos))
-            .attr("r",  10);
+            .attr("cy", d => y_scale(d.Total))
+            .attr("r",  4)
+            .attr("class","Total")
 
             let x_axis=d3.axisBottom(x_scale);
             let y_axis=d3.axisLeft(y_scale);
@@ -42,7 +56,7 @@
             d3.select("svg")
                 .append("g")
                 .attr("class","x axis")
-                .attr("transform","translate(0," + (height - margin) + ")")
+                .attr("transform","translate(0," + ( h -margin ) + ")")
                 .call(x_axis)
 
             d3.select("svg")
@@ -54,23 +68,46 @@
 
             let line=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.Numero_de_Alunos))
+                .y((d,i)=>y_scale(d.Total))
             d3.select("svg")
                 .append("path")
                 .attr("d",line(data))
-                .attr("class","linha_alunos")
+                .attr("class","Total")
+                
+            svg.append("text")
+                .attr("x", (w / 2))             
+                .attr("y",  (margin / 2))
+                .attr("text-anchor", "middle")  
+                    .text("Acidentes por tipo de via (total por agora)");
+                
+        }
+        
+
+        function draw_acidents_via(data) {
+
+
+
 
 
 
         }
+
+
     </script>
 </head>
 <body>
+    <!-- button that shows either total tipo de via ou all others together -->
+    <button id="TotalorOthersButton">change between total and all others </button>
     <script>
-        d3.json("MIECT_Alunos_Ano.json")
-            .then(draw)
-            .catch(function(err){console.log(err)});
+        // Initial data load and visualization
+        d3.csv("data/PORDATA_Acidentes-por-tipo-de-via.csv")
+        .then(draw_acidentes_total_via)
+        .catch(function(err) {
+            console.log(err);
+        });
+
     </script>
+
 </body>
 
-</html><link rel="stylesheet" href="3_2_Style.css">
+</html><link rel="stylesheet" href="Tipo_Via_Style.css">
