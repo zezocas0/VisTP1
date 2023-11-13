@@ -9,16 +9,32 @@
         let width = 1800;
         let height = 1080;
         let margin = 100;
-        //function draw(data){
-        //      
-        //      
-        //      
-        //d3.select("#TotalorOthersButton").on("click", function(e,d) {
-        //    //either draw total or all others together
-        //    
-        //})
-       //
-        //}
+        function draw(data){
+            //set variable
+            let isTotal = true;
+            
+            //function to draw
+            function drawData() {
+                //clear svg, so it takes the same spot as before
+                d3.select("svg").remove();
+                if (isTotal) {
+                    draw_acidents_via(data);
+                } else {
+                    draw_acidentes_total_via(data);
+                }
+            }
+            
+            //initial draw
+            drawData();
+
+            d3.select("#TotalorOthersButton").on("click", function(e,d) {
+                //changing istotal and drawing now the new data
+                isTotal = !isTotal;
+                drawData();
+
+            })
+            
+        }
 
 
 
@@ -84,6 +100,89 @@
         
 
         function draw_acidents_via(data) {
+            let w = 1000, h = 600; // width and height
+            
+            let svg = d3.select('body').append('svg')
+            .attr('width', w)
+            .attr('height', h);
+            
+            
+            // The scale does not have extent, as it need all the values
+            let x_extent = data.map(d => d.Ano);
+            let x_scale = d3.scalePoint()
+                .range([  margin ,w- margin])
+                .domain(x_extent);
+                
+            let y_extent = d3.extent(data, d => d.Arruamento);
+            let y_scale = d3.scaleLinear()
+            .range([h - margin, margin])
+            .domain([0, y_extent[1]]);
+            
+
+            let x_axis=d3.axisBottom(x_scale);
+            let y_axis=d3.axisLeft(y_scale);
+            
+            
+
+
+            let circles_Arruamento = svg.selectAll("circle")
+                .data(data)
+                .join("circle")
+                .attr("cx", d => x_scale(d.Ano))
+                .attr("cy", d => y_scale(d.Arruamento))
+                .attr("r",  4)
+                .attr("class","Arruamento")
+
+            /// todo: definir detline1 e fazco uma linha d3 line e depois a partir do svg appendar a linha
+            let line_arruamento=d3.line()
+                .x((d,i)=>x_scale(d.Ano))
+                .y((d,i)=>y_scale(d.Arruamento))
+                d3.select("svg")
+                    .append("path")
+                    .attr("d",line_arruamento(data))
+                    .attr("class","Arruamento")
+            
+            let circles_Autoestrada = svg.selectAll("circle")
+            .data(data)
+            .join("circle")
+            .attr("cx", d => x_scale(d.Ano))
+            .attr("cy", d => y_scale(d.Autoestrada))
+            .attr("r",  4)
+            .attr("class","Autoestrada")
+            
+            
+            let line_autoestrada=d3.line()
+                .x((d,i)=>x_scale(d.Ano))
+                .y((d,i)=>y_scale(d.Aautoestrada))
+                d3.select("svg")
+                    .append("path")
+                    .attr("d",line_autoestrada(data))
+                    .attr("class","Autoestrada")
+                    
+
+
+
+
+
+            d3.select("svg")
+                .append("g")
+                .attr("class","x axis")
+                .attr("transform","translate(0," + ( h -margin ) + ")")
+                .call(x_axis)
+
+            d3.select("svg")
+                .append("g")
+                .attr("class","y axis")
+                .attr("transform","translate(" + margin + ",0)")
+                .call(y_axis)                   
+            
+            svg.append("text")
+                .attr("x", (w / 2))             
+                .attr("y",  (margin / 2))
+                .attr("text-anchor", "middle")  
+                    .text("Acidentes por tipo de via ");
+
+
 
 
 
@@ -101,7 +200,7 @@
     <script>
         // Initial data load and visualization
         d3.csv("data/PORDATA_Acidentes-por-tipo-de-via.csv")
-        .then(draw_acidentes_total_via)
+        .then(draw)
         .catch(function(err) {
             console.log(err);
         });
