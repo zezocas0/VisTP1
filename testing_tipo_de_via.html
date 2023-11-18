@@ -4,6 +4,34 @@
     <head>
         <meta charset="utf-8">
         <script src="http://d3js.org/d3.v6.js"></script>
+        <style>
+           
+           .Arruamento {
+                stroke: red; /* Altera a cor da linha para vermelho */
+            }
+
+            .Autoestrada {
+                stroke: blue; /* Altera a cor da linha para azul */
+            }
+
+            .Municipal {
+                stroke: green; /* Altera a cor da linha para verde */
+            }
+
+            .Nacional {
+                stroke: orange; /* Altera a cor da linha para laranja */
+            }
+
+            .IPIC {
+                stroke: purple; /* Altera a cor da linha para roxo */
+            }
+
+            .Outras_vias {
+                stroke: #ffcc00; /* Altera a cor da linha para amarelo */
+            }
+
+
+        </style>
         <script>
         // com base no exemplo 3.2 de as aulas.
         let width = 1800;
@@ -121,10 +149,23 @@
 
             let x_axis=d3.axisBottom(x_scale);
             let y_axis=d3.axisLeft(y_scale);
-            
-            
 
+            svg.append("g")
+            .attr("class","x axis")
+            .attr("transform","translate(0," + ( h -margin ) + ")")
+            .call(x_axis)
 
+            svg.append("g")
+                .attr("class","y axis")
+                .attr("transform","translate(" + margin + ",0)")
+                .call(y_axis) 
+            
+            svg.append("text")
+                .attr("x", (w / 2))             
+                .attr("y",  (margin / 2))
+                .attr("text-anchor", "middle")  
+                .text("Acidentes por tipo de via ");
+                        
             let circles_Arruamento = svg.selectAll("circle")
                 .data(data)
                 .join("circle")
@@ -137,57 +178,97 @@
             let line_arruamento=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
                 .y((d,i)=>y_scale(d.Arruamento))
-                d3.select("svg")
-                    .append("path")
-                    .attr("d",line_arruamento(data))
-                    .attr("class","Arruamento")
+
+            svg.append("path")
+                .attr("d",line_arruamento(data))
+                .attr("class","Arruamento");
             
             let circles_Autoestrada = svg.selectAll("circle")
-            .data(data)
-            .join("circle")
-            .attr("cx", d => x_scale(d.Ano))
-            .attr("cy", d => y_scale(d.Autoestrada))
-            .attr("r",  4)
-            .attr("class","Autoestrada")
-            
+                .data(data)
+                .join("circle")
+                .attr("cx", d => x_scale(d.Ano))
+                .attr("cy", d => y_scale(d.Autoestrada))
+                .attr("r",  4)
+                .attr("class","Autoestrada")
             
             let line_autoestrada=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.Aautoestrada))
-                d3.select("svg")
-                    .append("path")
-                    .attr("d",line_autoestrada(data))
-                    .attr("class","Autoestrada")
-                    
-
-
-
-
-
-            d3.select("svg")
-                .append("g")
-                .attr("class","x axis")
-                .attr("transform","translate(0," + ( h -margin ) + ")")
-                .call(x_axis)
-
-            d3.select("svg")
-                .append("g")
-                .attr("class","y axis")
-                .attr("transform","translate(" + margin + ",0)")
-                .call(y_axis)                   
+                .y((d,i)=>y_scale(d.Autoestrada))
             
-            svg.append("text")
-                .attr("x", (w / 2))             
-                .attr("y",  (margin / 2))
-                .attr("text-anchor", "middle")  
-                    .text("Acidentes por tipo de via ");
+            svg.append("path")
+                .attr("d",line_autoestrada(data))
+                .attr("class","Autoestrada");
+        
+
+            // Dados acerca da estrada municipal
+            let circles_municipal = svg.selectAll("circle")
+                .data(data)
+                .join("circle")
+                .attr("cx", d => x_scale(d.Ano))
+                .attr("cy", d => y_scale(d.Emunicipal))
+                .attr("r",  4)
+                .attr("class","Municipal")
+
+            let line_municipal=d3.line()
+                .x((d,i)=>x_scale(d.Ano))
+                .y((d,i)=>y_scale(d.Emunicipal))
+            svg.append("path")
+                .attr("d",line_municipal(data))
+                .attr("class","Municipal");
+            
+            // Dados acerca da estrada Nacional
+            let circles_Nacional = svg.selectAll("circle")
+                .data(data)
+                .join("circle")
+                .attr("cx", d => x_scale(d.Ano))
+                .attr("cy", d => y_scale(d.Enacional))
+                .attr("r",  4)
+                .attr("class","Nacional")
+            
+            let line_Nacional=d3.line()
+                .x((d,i)=>x_scale(d.Ano))
+                .y((d,i)=>y_scale(d.Enacional))
+            svg.append("path")
+                .attr("d",line_Nacional(data))
+                .attr("class","Nacional");
 
 
+            // Dados acerca da IPIC
+            let circles_IPIC = svg.selectAll("circle")
+                .data(data)
+                .join("circle")
+                .attr("cx", d => x_scale(d.Ano))
+                .attr("cy", d => y_scale(d.IPIC))
+                .attr("r",  4)
+                .attr("class","IPIC")
+
+            let line_IPIC=d3.line()
+                .x((d,i)=>x_scale(d.Ano))
+                .y((d,i)=>y_scale(d.IPIC))
+            svg.append("path")
+                .attr("d",line_IPIC(data))
+                .attr("class","IPIC");
 
 
+             
+            let line_Outras_vias=d3.line()
+                .x((d,i)=>x_scale(d.Ano))
+                .y((d,i)=>y_scale(d.Outras))
 
+            svg.append("path")
+                .attr("d",line_Outras_vias(data))
+                .attr("class","Outras_vias");
 
-
+            // Dados acerca da Outras vias
+            let circles_Outras_vias = svg.selectAll("circle")
+                .data(data)
+                .join("circle")
+                .attr("cx", d => x_scale(d.Ano))
+                .attr("cy", d => y_scale(d.Outras))
+                .attr("r",  4)
+                .attr("class","Outras_vias")
+           
+            
 
         }
 
