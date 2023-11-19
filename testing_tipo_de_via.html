@@ -5,7 +5,6 @@
         <meta charset="utf-8">
         <script src="http://d3js.org/d3.v6.js"></script>
         <style>
-           
            .Arruamento {
                 stroke: red; /* Altera a cor da linha para vermelho */
             }
@@ -30,8 +29,59 @@
                 stroke: #ffcc00; /* Altera a cor da linha para amarelo */
             }
 
+            .pie-chart {
+                position: absolute;
+                right: 20px; /* Ajuste a posição conforme necessário */
+                top: 150px; /* Ajuste a posição conforme necessário */
+            }
+
+
+            /* Add a black background color to the top navigation */
+            .topnav {
+                background-color: #333;
+                overflow: hidden;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 20px;
+                box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+            }
+            
+            .topnav a,
+            .topnav h1 {
+                color: #f2f2f2;
+                text-decoration: none;
+                font-size: 17px;
+                padding: 14px 16px;
+                margin: 0; /* Reset default margins */
+                text-align: center;
+            }
+
+            /* Change the color of links on hover */
+            .topnav a:hover {
+                background-color: #ddd;
+                color: black;
+            }
+
+            /* Add a color to the active/current link */
+            .topnav a.active {
+                background-color: #04AA6D;
+                color: white;
+            }
 
         </style>
+
+        <div class="topnav">
+            <a class="active" href="#home">Home</a>
+            <h1>Acidentes por tipo de via</h1>
+            <a href="/acidentes-por-veiculo" class="active">Acidentes por veículo</a>
+        </div>
+
         <script>
         // com base no exemplo 3.2 de as aulas.
         let width = 1800;
@@ -47,6 +97,7 @@
                 d3.select("svg").remove();
                 if (isTotal) {
                     draw_acidents_via(data);
+                    drawPieChart();
                 } else {
                     draw_acidentes_total_via(data);
                 }
@@ -62,6 +113,68 @@
 
             })
             
+        }   
+
+        function drawPieChart() {
+            const w = 150;
+            const h = 150;
+            const radius = Math.min(w, h) / 2;
+
+            const data = [
+                { key: 'VM', value: 1 / 3 * 100 },
+                { key: 'FL', value: 1 / 3 * 100 },
+                { key: 'FG', value: 1 / 3 * 100 }
+            ];
+
+            const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+            const svg = d3.select('body').append('svg')
+                .attr('class', 'pie-chart') // Adicione a classe aqui
+                .attr('width', w)
+                .attr('height', h)
+                .append('g')
+                .attr('transform', `translate(${w / 2}, ${h / 2})`);
+
+            const pie = d3.pie().value(d => d.value);
+            const data_ready = pie(data);
+
+            const arcGenerator = d3.arc()
+                .innerRadius(0)
+                .outerRadius(radius);
+
+            const arcs = svg.selectAll('whatever')
+                .data(data_ready)
+                .enter()
+                .append('g')
+                .attr('class', 'arc');
+
+            arcs.append('path')
+                .attr('d', arcGenerator)
+                .attr('fill', d => color(d.data.key))
+                .attr('stroke', 'black')
+                .style('stroke-width', '2px')
+                .style('opacity', 0.7);
+
+            // Legend
+            const legend = svg.selectAll('.legend')
+                .data(data_ready)
+                .enter()
+                .append('g')
+                .attr('class', 'legend')
+                .attr('transform', (_, i) => `translate(-100, ${i * 20})`);
+
+            legend.append('rect')
+                .attr('x', w - 18)
+                .attr('width', 18)
+                .attr('height', 18)
+                .style('fill', d => color(d.data.key));
+
+            legend.append('text')
+                .attr('x', w - 24)
+                .attr('y', 9)
+                .attr('dy', '.35em')
+                .style('text-anchor', 'end')
+                .text(d => d.data.key);
         }
 
 
@@ -267,12 +380,7 @@
                 .attr("cy", d => y_scale(d.Outras))
                 .attr("r",  4)
                 .attr("class","Outras_vias")
-           
-            
-
         }
-
-
     </script>
 </head>
 <body>
