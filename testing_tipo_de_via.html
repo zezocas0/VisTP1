@@ -5,6 +5,29 @@
         <meta charset="utf-8">
         <script src="http://d3js.org/d3.v6.js"></script>
         <style>
+            #yearFilter {
+                position: fixed;
+                top: 50%;
+                left: 1.5%;
+                transform: translate(0, -50%);
+                width: 70px;
+                height: 400px;
+                border: 2px solid black;
+            }
+
+
+            .checkbox-row {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                margin-bottom: 5px;
+                margin-left: 10px;
+            }
+
+            .checkbox-row .checkbox {
+                margin-right: 10px;
+            }
+
            .Arruamento {
                 stroke: red; /* Altera a cor da linha para vermelho */
             }
@@ -33,6 +56,11 @@
                 position: absolute;
                 right: 20px; /* Ajuste a posição conforme necessário */
                 top: 150px; /* Ajuste a posição conforme necessário */
+            }
+
+            .svg-container {
+                display: block;
+                margin: auto;
             }
 
 
@@ -73,47 +101,68 @@
                 background-color: #04AA6D;
                 color: white;
             }
-
         </style>
+</head>
+<body>
+    <div class="topnav">
+        <a class="active" href="#home">Home</a>
+        <h1>Acidentes por tipo de via</h1>
+        <a href="/acidentes-por-veiculo" class="active">Acidentes por veículo</a>
+    </div>
 
-        <div class="topnav">
-            <a class="active" href="#home">Home</a>
-            <h1>Acidentes por tipo de via</h1>
-            <a href="/acidentes-por-veiculo" class="active">Acidentes por veículo</a>
-        </div>
 
-        <script>
+    <div id="yearFilter"></div>
+ 
+
+    <button id="TotalorOthersButton">change between total and all others </button>
+    <script>
+
+        // Initial data load and visualization
+        d3.csv("data/PORDATA_Acidentes-por-tipo-de-via.csv")
+        .then(draw)
+        .catch(function(err) {
+            console.log(err);
+        });
+
+        const yearFilter = document.getElementById("yearFilter");
+        const years = [2007,2008,2009,2010,2011,2012, 2013, 2014, 2015,2016,2017,2018,2019,2020,2021,2022];
+
+        for (const year of years) {
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.value = year;
+
+            const label = document.createElement("label");
+            label.textContent = year;
+            label.appendChild(checkbox);
+
+            const checkboxRow = document.createElement("div");
+            checkboxRow.classList.add("checkbox-row");
+            checkboxRow.appendChild(label);
+
+            yearFilter.appendChild(checkboxRow);
+        }
+
         // com base no exemplo 3.2 de as aulas.
         let width = 1800;
         let height = 1080;
         let margin = 100;
-        function draw(data){
-            //set variable
-            let isTotal = true;
-            
-            //function to draw
-            function drawData() {
-                //clear svg, so it takes the same spot as before
-                d3.select("svg").remove();
-                if (isTotal) {
-                    draw_acidents_via(data);
-                    drawPieChart();
-                } else {
-                    draw_acidentes_total_via(data);
-                }
-            }
-            
-            //initial draw
-            drawData();
 
-            d3.select("#TotalorOthersButton").on("click", function(e,d) {
-                //changing istotal and drawing now the new data
-                isTotal = !isTotal;
-                drawData();
+        function draw(data) {
 
-            })
-            
-        }   
+            const yearFilter = d3.select("#yearFilter");
+
+            yearFilter.on("change", () => {
+                const selectedYears = [];
+                yearFilter.selectAll(".yearCheckbox:checked").each((d) => {
+                    selectedYears.push(d.value);
+                });
+            });
+
+            draw_acidents_via(data);
+            drawPieChart();
+            updateChart(data);
+        }
 
         function drawPieChart() {
             const w = 150;
@@ -176,8 +225,6 @@
                 .style('text-anchor', 'end')
                 .text(d => d.data.key);
         }
-
-
 
 
         function draw_acidentes_total_via(data) {
@@ -362,8 +409,6 @@
                 .attr("d",line_IPIC(data))
                 .attr("class","IPIC");
 
-
-             
             let line_Outras_vias=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
                 .y((d,i)=>y_scale(d.Outras))
@@ -381,19 +426,6 @@
                 .attr("r",  4)
                 .attr("class","Outras_vias")
         }
-    </script>
-</head>
-<body>
-    <!-- button that shows either total tipo de via ou all others together -->
-    <button id="TotalorOthersButton">change between total and all others </button>
-    <script>
-        // Initial data load and visualization
-        d3.csv("data/PORDATA_Acidentes-por-tipo-de-via.csv")
-        .then(draw)
-        .catch(function(err) {
-            console.log(err);
-        });
-
     </script>
 
 </body>
