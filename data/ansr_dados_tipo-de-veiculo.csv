@@ -17,7 +17,7 @@ ano,Tipo_de_Veiculo ,Atropelamento,Colisao,Despiste,
 2009,ciclomotores,90,2362,1253,3705
 2009,motrociclos,132,2343,1177,3652
 2009,outros,29,242,135,406
-2010,Vligeiros,5063,31598,45857,82518
+2010,Vligeiros,5063,31598,9196,45857
 2010,Vpesados,213,1798,2205,4216
 2010,velocipedes,56,140,1210,1406
 2010,ciclomotores,95,1214,3583,4892
@@ -41,7 +41,7 @@ ano,Tipo_de_Veiculo ,Atropelamento,Colisao,Despiste,
 2013,ciclomotores,76,1643,1018,2737
 2013,motrociclos,115,2265,1238,3618
 2013,outros,69,370,244,683
-2014,Vligeiros,4586,257144,7579,269309
+2014,Vligeiros,4586,25744,7579,37909
 2014,Vpesados,175,1191,178,1544
 2014,velocipedes,78,1433,403,1914
 2014,ciclomotores,87,1547,1053,2687
