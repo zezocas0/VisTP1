@@ -5,6 +5,24 @@
         <meta charset="utf-8">
         <script src="http://d3js.org/d3.v6.js"></script>
         <style>
+            :root{
+    
+                --Total_color: royalblue; /* para os valores totais */
+            
+                --Arruamento_color:lightgreen;  /* para os arruamentos*/
+                
+                --autoestrada_color:lightslategrey;       /* para as autoestradas*/
+            
+                --Emunicipal_color:darkorange;       /* para as estradas municipais*/
+                    
+                --Enacional_color:orangered; /* para as estradas nacionais*/
+            
+                --IPIC_color:mediumvioletred;    /* para as ips e ics*/
+            
+                --Outras_color:crimson;/* para as outras*/
+            
+            
+            }
             #yearFilter {
                 position: fixed;
                 top: 50%;
@@ -28,29 +46,73 @@
                 margin-right: 10px;
             }
 
-           .Arruamento {
-                stroke: red; /* Altera a cor da linha para vermelho */
+                    
+            /* para os arruamentos*/
+            path.Arruamento{
+                stroke:var(--Arruamento_color);
+                stroke-width: 2px;
+                fill:none;
+
+            }
+            circle.Arruamento{
+                fill: var(--Arruamento_color);
+                opacity: 0.6;
+
+            }
+            /* para as autoestradas*/
+            path.Autoestrada{
+                stroke:var(--autoestrada_color);
+                stroke-width: 2px;
+                fill:none;
+            }
+            circle.Autoestrada{
+                fill: var(--autoestrada_color);
+                opacity: 0.6;
             }
 
-            .Autoestrada {
-                stroke: blue; /* Altera a cor da linha para azul */
+            /* para as estradas municipais*/
+            path.Municipal{
+                stroke:var(--Emunicipal_color);
+                stroke-width: 2px;
+                fill:none;
             }
-
-            .Municipal {
-                stroke: green; /* Altera a cor da linha para verde */
+            circle.Municipal{
+                fill: var(--Emunicipal_color);
+                opacity: 0.6;
             }
-
-            .Nacional {
-                stroke: orange; /* Altera a cor da linha para laranja */
+            
+            
+            /* para as estradas nacionais*/
+            path.Nacional{
+                stroke:var(--Enacional_color);
+                stroke-width: 2px;
+                fill:none;
             }
-
-            .IPIC {
-                stroke: purple; /* Altera a cor da linha para roxo */
+            circle.Nacional{
+                fill: var(--Enacional_color);
+                opacity: 0.6;
             }
-
-            .Outras_vias {
-                stroke: #ffcc00; /* Altera a cor da linha para amarelo */
+            /* para as ips e ics*/
+            path.IPIC{
+                stroke:var(--IPIC_color);
+                stroke-width: 2px;
+                fill:none;
             }
+            circle.IPIC{
+                fill: var(--IPIC_color);
+                opacity: 0.6;
+            }
+            /* para as outras*/
+            path.Outras_vias{
+                stroke:var(--Outras_color);
+                stroke-width: 2px;
+                fill:none;
+            }
+            circle.Outras_vias{
+                fill: var(--Outras_color);
+                opacity: 0.6;
+            }
+            
 
             .pie-chart {
                 position: absolute;
@@ -161,7 +223,7 @@
 
             draw_acidents_via(data);
             drawPieChart();
-            updateChart(data);
+            //updateChart(data);
         }
 
         function drawPieChart() {
@@ -326,7 +388,7 @@
                 .attr("text-anchor", "middle")  
                 .text("Acidentes por tipo de via ");
                         
-            let circles_Arruamento = svg.selectAll("circle")
+            let circles_Arruamento = svg.selectAll(".Arruamento")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
@@ -343,7 +405,7 @@
                 .attr("d",line_arruamento(data))
                 .attr("class","Arruamento");
             
-            let circles_Autoestrada = svg.selectAll("circle")
+            let circles_Autoestrada = svg.selectAll(".Autoestrada")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
@@ -361,7 +423,7 @@
         
 
             // Dados acerca da estrada municipal
-            let circles_municipal = svg.selectAll("circle")
+            let circles_municipal = svg.selectAll(".Municipal")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
@@ -377,7 +439,7 @@
                 .attr("class","Municipal");
             
             // Dados acerca da estrada Nacional
-            let circles_Nacional = svg.selectAll("circle")
+            let circles_Nacional = svg.selectAll(".Nacional")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
@@ -394,7 +456,7 @@
 
 
             // Dados acerca da IPIC
-            let circles_IPIC = svg.selectAll("circle")
+            let circles_IPIC = svg.selectAll(".IPIC")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
@@ -409,6 +471,16 @@
                 .attr("d",line_IPIC(data))
                 .attr("class","IPIC");
 
+                
+            // Dados acerca da Outras vias
+            let circles_Outras_vias = svg.selectAll(".Outras_vias")
+                .data(data)
+                .join("circle")
+                .attr("cx", d => x_scale(d.Ano))
+                .attr("cy", d => y_scale(d.Outras))
+                .attr("r",  4)
+                .attr("class","Outras_vias")
+           
             let line_Outras_vias=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
                 .y((d,i)=>y_scale(d.Outras))
@@ -416,16 +488,7 @@
             svg.append("path")
                 .attr("d",line_Outras_vias(data))
                 .attr("class","Outras_vias");
-
-            // Dados acerca da Outras vias
-            let circles_Outras_vias = svg.selectAll("circle")
-                .data(data)
-                .join("circle")
-                .attr("cx", d => x_scale(d.Ano))
-                .attr("cy", d => y_scale(d.Outras))
-                .attr("r",  4)
-                .attr("class","Outras_vias")
-        }
+            }
     </script>
 
 </body>
