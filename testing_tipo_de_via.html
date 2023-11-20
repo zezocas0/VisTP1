@@ -54,7 +54,7 @@
 
             .pie-chart {
                 position: absolute;
-                right: 20px; /* Ajuste a posição conforme necessário */
+                right: 70px; /* Ajuste a posição conforme necessário */
                 top: 150px; /* Ajuste a posição conforme necessário */
             }
 
@@ -160,8 +160,9 @@
             });
 
             draw_acidents_via(data);
+            //draw_acidentes_total_via(data);
             drawPieChart();
-            updateChart(data);
+            //updateChart(data);
         }
 
         function drawPieChart() {
@@ -179,10 +180,10 @@
 
             const svg = d3.select('body').append('svg')
                 .attr('class', 'pie-chart') // Adicione a classe aqui
-                .attr('width', w)
-                .attr('height', h)
+                .attr('width', w+100)
+                .attr('height', h+100)
                 .append('g')
-                .attr('transform', `translate(${w / 2}, ${h / 2})`);
+                .attr('transform', `translate(${w / 2+10}, ${h / 2})`);
 
             const pie = d3.pie().value(d => d.value);
             const data_ready = pie(data);
@@ -199,10 +200,10 @@
 
             arcs.append('path')
                 .attr('d', arcGenerator)
-                .attr('fill', d => color(d.data.key))
-                .attr('stroke', 'black')
+                .style('fill', d => color(d.data.key))
+                .style('stroke', "black")
                 .style('stroke-width', '2px')
-                .style('opacity', 0.7);
+                //.style('opacity', 0.7);
 
             // Legend
             const legend = svg.selectAll('.legend')
@@ -210,16 +211,16 @@
                 .enter()
                 .append('g')
                 .attr('class', 'legend')
-                .attr('transform', (_, i) => `translate(-100, ${i * 20})`);
+                .attr('transform', (_, i) => `translate(-50, ${i * 20})`);
 
             legend.append('rect')
-                .attr('x', w - 18)
+                .attr('x', w+18)
                 .attr('width', 18)
                 .attr('height', 18)
                 .style('fill', d => color(d.data.key));
 
             legend.append('text')
-                .attr('x', w - 24)
+                .attr('x', w+10)
                 .attr('y', 9)
                 .attr('dy', '.35em')
                 .style('text-anchor', 'end')
