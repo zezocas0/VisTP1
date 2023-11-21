@@ -4,218 +4,64 @@
     <head>
         <meta charset="utf-8">
         <script src="http://d3js.org/d3.v6.js"></script>
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="Tipo_Via_Style.css">
-        <style>
-            body {
-                background-color: #fffafa; /* Light gray background */
-                color: #000000; /* Dark text color */
-                font-family: Arial, sans-serif; /* Choose a suitable font */
-                margin: 0; /* Reset default margin */
-            }
-            :root{
+
+        <!-- Favicon -->
+        <link href="img/favicon.ico" rel="icon">
     
-                --Total_color: royalblue; /* para os valores totais */
-            
-                --Arruamento_color:lightgreen;  /* para os arruamentos*/
-                
-                --autoestrada_color:lightslategrey;       /* para as autoestradas*/
-            
-                --Emunicipal_color:darkorange;       /* para as estradas municipais*/
-                    
-                --Enacional_color:orangered; /* para as estradas nacionais*/
-            
-                --IPIC_color:mediumvioletred;    /* para as ips e ics*/
-            
-                --Outras_color:crimson;/* para as outras*/
-            }
-                    
-            /* para os arruamentos*/
-            path.Arruamento{
-                stroke:var(--Arruamento_color);
-                stroke-width: 2px;
-                fill:none;
-
-            }
-            circle.Arruamento{
-                fill: var(--Arruamento_color);
-                opacity: 0.6;
-
-            }
-            /* para as autoestradas*/
-            path.Autoestrada{
-                stroke:var(--autoestrada_color);
-                stroke-width: 2px;
-                fill:none;
-            }
-            circle.Autoestrada{
-                fill: var(--autoestrada_color);
-                opacity: 0.6;
-            }
-
-            /* para as estradas municipais*/
-            path.Municipal{
-                stroke:var(--Emunicipal_color);
-                stroke-width: 2px;
-                fill:none;
-            }
-            circle.Municipal{
-                fill: var(--Emunicipal_color);
-                opacity: 0.6;
-            }
-            
-            
-            /* para as estradas nacionais*/
-            path.Nacional{
-                stroke:var(--Enacional_color);
-                stroke-width: 2px;
-                fill:none;
-            }
-            circle.Nacional{
-                fill: var(--Enacional_color);
-                opacity: 0.6;
-            }
-            /* para as ips e ics*/
-            path.IPIC{
-                stroke:var(--IPIC_color);
-                stroke-width: 2px;
-                fill:none;
-            }
-            circle.IPIC{
-                fill: var(--IPIC_color);
-                opacity: 0.6;
-            }
-            /* para as outras*/
-            path.Outras_vias{
-                stroke:var(--Outras_color);
-                stroke-width: 2px;
-                fill:none;
-            }
-            circle.Outras_vias{
-                fill: var(--Outras_color);
-                opacity: 0.6;
-            }
-            
-            .pie-chart {
-                position: absolute;
-                right: 70px; /* Ajuste a posição conforme necessário */
-                top: 150px; /* Ajuste a posição conforme necessário */
-            }
-
-            /* Adiciona estilos para centralizar o gráfico */
-            .chart-container {
-                position: relative;
-                width: 70%; /* Largura desejada */
-                margin: auto;
-            }
-
-            #chartContainer {
-                margin-top: 250px; /* Ajuste a margem superior conforme necessário */
-                margin-left: 150px;
-            }
-
-            #yearFilter {
-                position: fixed;
-                top: 50%;
-                left: 1.5%;
-                transform: translate(0, -50%);
-                width: 70px;
-                height: 400px;
-                margin-left: 50px;
-                border: 2px solid black;
-            }
-
-            .checkbox-row {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                margin-bottom: 5px;
-                margin-left: 10px;
-            }
-
-            .checkbox-row .checkbox {
-                margin-right: 10px;
-            }
-
-            .svg-container {
-                display: block;
-                margin: auto;
-            }
-
-
-            /* Add a black background color to the top navigation */
-            .topnav {
-                background-color: rgb(8, 104, 164);
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 50px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 0 20px;
-                box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-            }
-            
-            .topnav a,
-            .topnav h1 {
-                color: #000000;
-            }
-
-            /* Change the color of links on hover */
-            .topnav a:hover {
-                background-color: #0056b3; /* Darker blue on hover */
-                color: #fff;
-            }
-
-            /* Add a color to the active/current link */
-            .topnav a.active {
-                background-color: #004080;
-            }
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Roboto:wght@500;700;900&display=swap" rel="stylesheet"> 
+    
+        <!-- Icon Font Stylesheet -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+        <!-- Libraries Stylesheet -->
+        <link href="lib/animate/animate.min.css" rel="stylesheet">
+        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+        <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+        <!-- Template Stylesheet -->
+        <link href="css/style.css" rel="stylesheet">
+        <style>
         </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
-                </li>
-            </ul>
-            <a href="/acidentes-por-veiculo" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-                <h4 class="m-0 text-primary">Acidentes por veículo</h4>
-            </a> 
-        </div>
-      </nav>
-
-
- <!--
-    <div class="topnav">
-        <a class="active" href="#home">Home</a>
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0">
         <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <h2 class="m-0 text-primary">Home</h2>
+            <h2 class="m-0 text-primary">WooDY</h2>
         </a>
-        <h1>Acidentes por tipo de via</h1>
-        <a href="/acidentes-por-veiculo" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <h4 class="m-0 text-primary">Acidentes por veículo</h4>
-        </a>
-    </div>
-    -->
-    <!-- Envolve o filtro e o gráfico em uma div -->
-    <div class="chart-container">
-        <div id="yearFilter"></div>
-        <div id="chartContainer"></div>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link active">Home</a>
+                <!-- <a href="about.html" class="nav-item nav-link">About</a> -->
+                <a href="acidentes.html" class="nav-item nav-link">Acidentes em Portugal</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid bg-light overflow-hidden px-lg-0" style="min-height: 1500px;">
+        <div class="container Tipo_de_via px-lg-0">
+            <div class="chart-container">
+                <div id="yearFilter"></div>
+                <div id="chartContainer">
+                    <h4 class="text-dark mb-4 fs-4" style="position: absolute; top: -50px; left: 50%; transform: translateX(-50%);">Acidentes por tipo de via</h4>
+                    <!-- Fim do título -->
+                </div>
+                <div id="chartContainer2">
+                    <h4 class="text-dark mb-4 fs-4" style="position: absolute; top: -50px; left: 50%; transform: translateX(-50%);">Acidentes por tipo de via</h4>
+                    <!-- Fim do título -->
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -258,6 +104,7 @@
 
             draw_stacked_bar_chart();
             drawPieChart();
+            draw_acidents_via(data);
         }
         
 
@@ -329,8 +176,8 @@
 
         // Grafico de barras agrupado num respetivo ano
         async function draw_stacked_bar_chart() {
-            const width = 800;
-            const height = 600;width
+            const width = 600;
+            const height = 400;
             const marginLeft = 40;
             const marginRight = 10;
             const marginBottom = 40; // Aumente a margem inferior para acomodar os rótulos do eixo y
@@ -388,7 +235,10 @@
                 .attr("transform", `translate(${marginLeft},0)`)
                 .call(d3.axisLeft(y).ticks(5))
                 .call(g => g.selectAll(".domain").remove());
-        }
+
+                // Adiciona o título sobreposto ao gráfico
+           
+            }
 
 
 
@@ -517,8 +367,9 @@
 
         function draw_acidents_via(data) {
             let w = 1000, h = 600; // width and height
-            
-            let svg = d3.select('body').append('svg')
+            let margin = 40;
+
+            let svg = d3.select('#chartContainer2').append('svg')
             .attr('width', w)
             .attr('height', h);
             
@@ -659,4 +510,4 @@
 
 </body>
 
-</html><link rel="stylesheet" href="Tipo_Via_Style.css">
+</html>
