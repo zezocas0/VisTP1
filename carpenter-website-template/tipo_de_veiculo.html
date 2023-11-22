@@ -64,7 +64,7 @@
 
     <script>
         // Initial data load and visualization
-        d3.csv("data/PORDATA_Acidentes-por-tipo-de-via.csv")
+        d3.csv("data/PORDATA_Acidentes-por-tipo-de-veiculo.csv")
         .then(draw)
         .catch(function(err) {
             console.log(err);
@@ -125,7 +125,7 @@
         
             draw_stacked_bar_chart(2007);
             draw_acidents_via(data); 
-            drawPieChart();
+            drawPieChart(2007);
         }
         
 
@@ -137,7 +137,7 @@
             const marginRight = 10;
             const marginBottom = 40; // Aumente a margem inferior para acomodar os rótulos do eixo y
 
-            const data = await d3.csv("data/ansr_dados_tipo-de-via.csv", d3.autoType);
+            const data = await d3.csv("data/ansr_dados_tipo-de-veiculo.csv", d3.autoType);
             const data2007 = data.filter(d => d.ano === 2007);
 
             // Configuração das escalas
@@ -194,85 +194,72 @@
                 .call(g => g.selectAll(".domain").remove());
             }
         
-        
-        // Grafico de barras agrupado num respetivo ano
+    // Grafico de barras agrupado num respetivo ano
     async function draw_stacked_bar_chart(selectedYear) {
-            
         d3.select("#chartContainer").selectAll("svg").remove();
-        
-        
-        
+
         const width = 800;
         const height = 600;
         const marginLeft = 40;
         const marginRight = 10;
         const marginBottom = 40;
-        
-        const data = await d3.csv("data/ansr_dados_tipo-de-via.csv", d3.autoType);
+
+        const data = await d3.csv("data/ansr_dados_tipo-de-veiculo.csv", d3.autoType);
         const filteredData = data.filter(d => d.ano == selectedYear);
-    
 
         const x = d3.scaleBand()
-            .domain(filteredData.map(d => d.Tipo_de_via))
-            .rangeRound([marginLeft, width - marginRight])
+            .domain(filteredData.map(d => d.Tipo_de_Veiculo))
+            .range([marginLeft, width - marginRight])
             .paddingInner(0.1);
-    
-        const y = d3.scaleLinear()
-            .domain([0, d3.max(filteredData, d => d3.max([d.VM, d.FG, d.FL]))])
-            .range([height - marginBottom, 0]);
-                          
-        // add the x and y lines to the svg
-        const xAxis = d3.axisBottom(x);
-        const yAxis = d3.axisLeft(y).ticks(5);
 
-         
-        
-        
-        const categories = ["VM", "FG", "FL"];
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(filteredData, d => d3.max([d.Atropelamento, d.Colisao, d.Despiste]))])
+            .range([height - marginBottom, 0]);
+
+        const categories = ["Atropelamento", "Colisao", "Despiste"];
         const color = d3.scaleOrdinal()
-        .domain(categories)
-        .range(d3.schemeCategory10);
-    
+            .domain(categories)
+            .range(d3.schemeCategory10);
+
         const svg = d3.select("#chartContainer").append("svg")
             .attr("width", width)
             .attr("height", height);
-    
+
         const stackedData = d3.stack()
             .keys(categories)
             .order(d3.stackOrderNone)
             .offset(d3.stackOffsetNone)(filteredData);
-    
+
         svg.append("text")
-            .attr("x", (width / 2))  // Use width instead of w
-            .attr("y", (marginBottom / 2))  // Use marginBottom instead of margin
+            .attr("x", (width / 2))
+            .attr("y", (marginBottom / 2))
             .attr("text-anchor", "middle")
             .text("Tipo de acidente no ano " + selectedYear);
-        
 
-    
         svg.selectAll(".bar")
             .data(stackedData)
             .enter().append("g")
-            .attr("class", d => "bar " + d.key)
+            .attr("class", "bar")
             .attr("fill", d => color(d.key))
             .selectAll("rect")
             .data(d => d)
             .enter().append("rect")
-            .attr("x", d => x(d.data.Tipo_de_via))
+            .attr("x", d => x(d.data.Tipo_de_Veiculo))
             .attr("y", d => y(d[1]))
             .attr("height", d => y(d[0]) - y(d[1]))
             .attr("width", x.bandwidth());
-    
+
         svg.append("g")
             .attr("transform", `translate(0,${height - marginBottom})`)
             .call(d3.axisBottom(x))
             .call(g => g.selectAll(".domain").remove());
-    
+
         svg.append("g")
             .attr("transform", `translate(${marginLeft},0)`)
             .call(d3.axisLeft(y).ticks(5))
             .call(g => g.selectAll(".domain").remove());
     }
+
 
 
 
@@ -283,13 +270,14 @@
             const radius = Math.min(w, h) / 2;
 
             const data = [
-                { key: 'VM', value: 1 / 3 * 100 },
-                { key: 'FL', value: 1 / 3 * 100 },
-                { key: 'FG', value: 1 / 3 * 100 }
+                { key: 'Atropelamento', value: 1 / 3 * 100 },
+                { key: 'colisao', value: 1 / 3 * 100 },
+                { key: 'despiste', value: 1 / 3 * 100 }
             ];
 
             const color = d3.scaleOrdinal(d3.schemeCategory10);
 
+            console.log(color);
             const svg = d3.select('body').append('svg')
                 .attr('class', 'pie-chart') // Adicione a classe aqui
                 .attr('width', w+100)
@@ -339,65 +327,6 @@
                 .text(d => d.data.key);
         }
 
-        function draw_acidentes_total_via(data) {
-            let w = 1000, h = 600; // width and height
-            
-            let svg = d3.select('body').append('svg')
-            .attr('width', w)
-            .attr('height', h);
-            
-            
-            // The scale does not have extent, as it need all the values
-            let x_extent = data.map(d => d.Ano);
-            let x_scale = d3.scalePoint()
-                .range([  margin ,w- margin])
-                .domain(x_extent);
-                
-            let y_extent = d3.extent(data, d => d.Total);
-            let y_scale = d3.scaleLinear()
-            .range([h - margin, margin])
-            .domain([0, y_extent[1]]);
-            
-            let circles_Total = svg.selectAll("circle")
-            .data(data)
-            .join("circle")
-            .attr("cx", d => x_scale(d.Ano))
-            .attr("cy", d => y_scale(d.Total))
-            .attr("r",  4)
-            .attr("class","Total")
-
-            let x_axis=d3.axisBottom(x_scale);
-            let y_axis=d3.axisLeft(y_scale);
-            
-            d3.select("svg")
-                .append("g")
-                .attr("class","x axis")
-                .attr("transform","translate(0," + ( h -margin ) + ")")
-                .call(x_axis)
-
-            d3.select("svg")
-                .append("g")
-                .attr("class","y axis")
-                .attr("transform","translate(" + margin + ",0)")
-                .call(y_axis)                   
-            
-
-            let line=d3.line()
-                .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.Total))
-            d3.select("svg")
-                .append("path")
-                .attr("d",line(data))
-                .attr("class","Total")
-                
-            svg.append("text")
-                .attr("x", (w / 2))             
-                .attr("y",  (margin / 2))
-                .attr("text-anchor", "middle")  
-                    .text("Acidentes por tipo de via (total por agora)");
-                
-        }
-        
 
         function draw_acidents_via(data) {
             let w = 1000, h = 600; // width and height
@@ -407,15 +336,14 @@
             let svg = d3.select('#chartContainer2').append('svg')
             .attr('width', w)
             .attr('height', h);
-            
-            
+        
             // The scale does not have extent, as it need all the values
             let x_extent = data.map(d => d.Ano);
             let x_scale = d3.scalePoint()
                 .range([  margin ,w- margin])
                 .domain(x_extent);
                 
-            let y_extent = d3.extent(data, d => d.Arruamento);
+            let y_extent = d3.extent(data, d => d.Vligeiros);
             let y_scale = d3.scaleLinear()
             .range([h - margin, margin])
             .domain([0, y_extent[1]]);
@@ -438,90 +366,90 @@
                 .attr("x", (w / 2))             
                 .attr("y",  (margin / 2))
                 .attr("text-anchor", "middle")  
-                .text("Acidentes por tipo de via ");
+                .text("Acidentes por tipo de veiculo ");
                         
-            let circles_Arruamento = svg.selectAll(".Arruamento")
+            let circles_Vligeiros = svg.selectAll(".Vligeiros")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
-                .attr("cy", d => y_scale(d.Arruamento))
+                .attr("cy", d => y_scale(d.Vligeiros))
                 .attr("r",  4)
-                .attr("class","Arruamento")
+                .attr("class","Vligeiros")
 
             /// todo: definir detline1 e fazco uma linha d3 line e depois a partir do svg appendar a linha
-            let line_arruamento=d3.line()
+            let line_Vligeiros=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.Arruamento))
+                .y((d,i)=>y_scale(d.Vligeiros))
 
             svg.append("path")
-                .attr("d",line_arruamento(data))
-                .attr("class","Arruamento");
+                .attr("d",line_Vligeiros(data))
+                .attr("class","Vligeiros");
             
-            let circles_Autoestrada = svg.selectAll(".Autoestrada")
+            let circles_Vpesados = svg.selectAll(".Vpesados")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
-                .attr("cy", d => y_scale(d.Autoestrada))
+                .attr("cy", d => y_scale(d.Vpesados))
                 .attr("r",  4)
-                .attr("class","Autoestrada")
+                .attr("class","Vpesados")
             
-            let line_autoestrada=d3.line()
+            let line_Vpesados=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.Autoestrada))
+                .y((d,i)=>y_scale(d.Vpesados))
             
             svg.append("path")
-                .attr("d",line_autoestrada(data))
-                .attr("class","Autoestrada");
+                .attr("d",line_Vpesados(data))
+                .attr("class","Vpesados");
         
 
             // Dados acerca da estrada municipal
-            let circles_municipal = svg.selectAll(".Municipal")
+            let circles_velocipedes = svg.selectAll(".velocipedes")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
-                .attr("cy", d => y_scale(d.Emunicipal))
+                .attr("cy", d => y_scale(d.velocipedes))
                 .attr("r",  4)
-                .attr("class","Municipal")
+                .attr("class","velocipedes")
 
-            let line_municipal=d3.line()
+            let line_velocipedes=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.Emunicipal))
+                .y((d,i)=>y_scale(d.velocipedes))
             svg.append("path")
-                .attr("d",line_municipal(data))
-                .attr("class","Municipal");
+                .attr("d",line_velocipedes(data))
+                .attr("class","velocipedes");
             
             // Dados acerca da estrada Nacional
-            let circles_Nacional = svg.selectAll(".Nacional")
+            let circles_ciclomotores = svg.selectAll(".ciclomotores")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
-                .attr("cy", d => y_scale(d.Enacional))
+                .attr("cy", d => y_scale(d.ciclomotores))
                 .attr("r",  4)
-                .attr("class","Nacional")
+                .attr("class","ciclomotores")
             
-            let line_Nacional=d3.line()
+            let line_ciclomotores=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.Enacional))
+                .y((d,i)=>y_scale(d.ciclomotores))
             svg.append("path")
-                .attr("d",line_Nacional(data))
-                .attr("class","Nacional");
+                .attr("d",line_ciclomotores(data))
+                .attr("class","ciclomotores");
 
 
             // Dados acerca da IPIC
-            let circles_IPIC = svg.selectAll(".IPIC")
+            let circles_motrociclos = svg.selectAll(".motrociclos")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
-                .attr("cy", d => y_scale(d.IPIC))
+                .attr("cy", d => y_scale(d.motrociclos))
                 .attr("r",  4)
-                .attr("class","IPIC")
+                .attr("class","motrociclos")
 
-            let line_IPIC=d3.line()
+            let line_motrociclos=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.IPIC))
+                .y((d,i)=>y_scale(d.motrociclos))
             svg.append("path")
-                .attr("d",line_IPIC(data))
-                .attr("class","IPIC");
+                .attr("d",line_motrociclos(data))
+                .attr("class","motrociclos");
 
                 
             // Dados acerca da Outras vias
@@ -544,5 +472,3 @@
     </script>
 
 </body>
-
-</html>
