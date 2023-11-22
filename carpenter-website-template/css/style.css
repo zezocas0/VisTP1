@@ -443,9 +443,6 @@ circle.Outras_vias{
 
 
 /* Para os Veículos */
-
-
-/* para os Vligeiros */
 path.Vligeiros {
     stroke: var(--Vligeiros_color);
     stroke-width: 2px;
@@ -511,32 +508,6 @@ circle.Outras_vias {
     opacity: 0.6;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .pie-chart {
     position: absolute;
     right: 100px; /* Ajuste a posição conforme necessário */
@@ -545,7 +516,7 @@ circle.Outras_vias {
 
 #chartContainer2{
     margin-top: 100px;
-    margin-left: 200px;
+    margin-left: 100px;
     overflow: auto;
     height: 600px; /* Adjust the height as needed */
 }
@@ -577,6 +548,40 @@ circle.Outras_vias {
 .acidentes_portugal {
     padding-top: 50px; /* Adjust the padding-top value to increase the spacing */
   }
+
+#chartContainer3{
+    margin-top: 40px;
+    margin-left: 150px;
+    overflow: auto;    
+}
+
+/* Estilos para a linha do gráfico */
+path.Total {
+    fill: none; /* Define que a linha não terá preenchimento */
+    stroke: rgb(108, 180, 86); /* Cor da linha (substitua pela cor desejada) */
+    stroke-width: 2; /* Largura da linha */
+}
+
+/* Estilos para os pontos do gráfico */
+circle.Total {
+    fill: rgb(108, 180, 86); /* Cor dos pontos (substitua pela cor desejada) */
+    stroke: none; /* Remove a borda dos pontos */
+}
+
+.smaller-text {
+    font-size: 17px; /* Ajuste o tamanho conforme desejado */
+}
+
+.color{
+    margin-bottom: 1.5rem;
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 2em;
+    color: rgb(108, 180, 86); 
+}
+
+
+
 
 
 /*** Quote ***/

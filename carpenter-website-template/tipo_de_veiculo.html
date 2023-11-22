@@ -329,8 +329,8 @@
 
 
         function draw_acidents_via(data) {
-            let w = 1000, h = 600; // width and height
-            margin=50;
+            let w = 1200, h = 550; // width and height
+            margin=80;
 
 
             let svg = d3.select('#chartContainer2').append('svg')
@@ -468,6 +468,25 @@
             svg.append("path")
                 .attr("d",line_Outras_vias(data))
                 .attr("class","Outras_vias");
+
+            svg.selectAll(".axis").style("stroke-width", "3px");
+            svg.selectAll(".axis text").style("font-size", "14px");
+
+            // legenda no eixo X
+            svg.append("text")
+                .attr("transform", "translate(" + (w / 2) + " ," + (h - 20) + ")")
+                .style("text-anchor", "middle")
+                .text("Anos");
+
+            // legenda no eixo Y
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0)
+                .attr("x", 0 - (h / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text("Número de Acidentes");
+
             }
     </script>
 

@@ -596,11 +596,11 @@
 
 
             // Dados acerca da IPIC
-            let circles_motrociclos = svg.selectAll(".motrociclos")
+            let circles_motrociclos = svg.selectAll(".motociclos")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
-                .attr("cy", d => y_scale(d.motrociclos))
+                .attr("cy", d => y_scale(d.motociclos))
                 .attr("r",  4)
                 .attr("class","motrociclos")
 
