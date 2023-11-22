@@ -107,7 +107,8 @@
         <div class="container regioes px-lg-0">
             <h1 class="color">Acidentes por regiões de Portugal</h1>
             <h5 class="text-darker mb-4 text-center mt-4 smaller-text"> Nesta página é possível observar uma visualização com o número de acidentes por regiões em Portugal.</h5>
-            <div class="chartContainer4"></div>
+            <div id="chartContainer4"></div>
+                
         </div>
     </div>
 
@@ -166,41 +167,75 @@
     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-0 back-to-top"><i class="bi bi-arrow-up"></i></a>
 
     <script>
+       // Load GeoJSON data
         d3.json("data/Portugal.json")
-            .then(draw)
-            .catch(err => { console.log(err) });
-        
-        function draw(geo_data) {
-            let margin = 75,
-                width = 1400 - margin,
-                height = 600 - margin;
+        .then(drawMap)
+        .catch(err => { console.log(err) });
 
-            let svg = d3.select("#chartContainer4").append("svg")
-                .attr("width", width + margin)
-                .attr("height", height + margin)
-                .append('g')
-                .attr('class', 'map');
-                    
-            var projection = d3.geoMercator()
-                .center([-20, 40])
-                .scale(2000)
-                .translate( [width / 2, height / 2]);
-            let path = d3.geoPath().projection(projection);
-            svg.append("path")
-                .attr("d", path(geo_data));
-            svg.style("fill","teal")
-                 .style("stroke","black")
-            
-            //draw outline of box around map
-            svg.append("rect")
-                .attr("x", 0)
-                .attr("y", 0)
-                .attr("width", width)
-                .attr("height", height)
-                .style("stroke", "black")
-                .style("fill", "none")
-                .style("stroke-width", 1);
-        };
+
+    function drawMap(geo_data) {
+        let margin = 75,
+            width = 1400 - margin,
+            height = 2000 - margin;
+
+        let svg = d3.select("#chartContainer4").append("svg")
+            .attr("width", width + margin)
+            .attr("height", height + margin)
+            .append('g')
+            .attr('class', 'map');
+
+        var projection = d3.geoMercator()
+            .center([-10, 39.5])
+            .scale(10000)
+            .translate([width / 2, height / 2]);
+
+        let path = d3.geoPath().projection(projection);
+
+        // Append a group for the map data
+        let map = svg.append("g").attr("class", "map")
+            .attr("transform", "translate(" + margin + "," + margin + ")"); // Apply translation here
+
+        map.selectAll("path")
+            .data(geo_data.features)
+            .enter()
+            .append("path")
+            .attr("d", path)
+            .style("fill", "teal")
+            .style("stroke", "black");
+
+    }
+
+
+        function drawData(csv_data) {
+        // Assuming "regiao" in the CSV corresponds to "name" in GeoJSON
+        let mergedData = geo_data.features.map(feature => {
+            let regionData = csv_data.find(d => d.regiao === feature.properties.name);
+            return {
+                ...feature,
+                properties: {
+                    ...feature.properties,
+                    data: regionData
+                }
+            };
+        });
+
+        // Now mergedData contains both GeoJSON and CSV data
+
+        // Add color to map based on Total
+        d3.select(".map")
+            .selectAll("path")
+            .data(mergedData)
+            .style("fill", d => {
+                // Use Total property for coloring
+                return colorScale(d.properties.data.Total);
+            });
+        }
+
+        // Define a color scale (customize as needed)
+        let colorScale = d3.scaleLinear()
+        .domain([0, 10000]) // Adjust the domain based on your data
+        .range(["white", "red"]); // Adjust the range based on your color preference
+
     </script>
 
 
