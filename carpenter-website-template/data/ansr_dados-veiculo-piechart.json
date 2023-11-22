@@ -1,0 +1,212 @@
+[
+    { 
+        "ano": 2007, 
+        "key": "Atropelamento",     
+        "value": 5573 
+    },
+    { 
+        "ano": 2007, 
+        "key": "Colisao",           
+        "value": 39709
+    },
+    { 
+        "ano": 2007, 
+        "key": "Despiste",          
+        "value": 11530 
+    },
+    { 
+        "ano": 2008, 
+        "key": "Atropelamento",     
+        "value": 5139 
+    },
+    { 
+        "ano": 2008, 
+        "key": "Colisao",           
+        "value": 37311
+    },
+    { 
+        "ano": 2008, 
+        "key": "Despiste",          
+        "value": 11425
+    },
+    { 
+        "ano": 2009, 
+        "key": "Atropelamento",     
+        "value": 5569 
+    },
+    { 
+        "ano": 2009, 
+        "key": "Colisao",           
+        "value": 38890
+    },
+    { 
+        "ano": 2009, 
+        "key": "Despiste",          
+        "value": 12233
+    },
+    { 
+        "ano": 2010, 
+        "key": "Atropelamento",     
+        "value": 5611 
+    },
+    { 
+        "ano": 2010, 
+        "key": "Colisao",           
+        "value": 36198
+    },
+    { 
+        "ano": 2010, 
+        "key": "Despiste",          
+        "value": 20477
+    },
+    { 
+        "ano": 2011, 
+        "key": "Atropelamento",     
+        "value": 5498 
+    },
+    { 
+        "ano": 2011, 
+        "key": "Colisao",           
+        "value": 35297
+    },
+    { 
+        "ano": 2011, 
+        "key": "Despiste",          
+        "value": 11323
+    },
+    { 
+        "ano": 2012, 
+        "key": "Atropelamento",     
+        "value": 4910 
+    },
+    { 
+        "ano": 2012, 
+        "key": "Colisao",           
+        "value": 32438
+    },
+    { 
+        "ano": 2012, 
+        "key": "Despiste",          
+        "value": 10419
+    },
+    { 
+        "ano": 2013, 
+        "key": "Atropelamento",     
+        "value": 5269 
+    },
+    { 
+        "ano": 2013, 
+        "key": "Colisao",           
+        "value": 33944
+    },
+    { 
+        "ano": 2013, 
+        "key": "Despiste",          
+        "value": 10342
+    },
+    { 
+        "ano": 2014, 
+        "key": "Atropelamento",     
+        "value": 5180 
+    },
+    { 
+        "ano": 2014, 
+        "key": "Colisao",           
+        "value": 32599
+    },
+    { 
+        "ano": 2014, 
+        "key": "Despiste",          
+        "value": 10914
+    },
+    { 
+        "ano": 2015, 
+        "key": "Atropelamento",     
+        "value": 5185 
+    },
+    { 
+        "ano": 2015, 
+        "key": "Colisao",           
+        "value": 35408
+    },
+    { 
+        "ano": 2015, 
+        "key": "Despiste",          
+        "value": 10981
+    },
+    { 
+        "ano": 2016, 
+        "key": "Atropelamento",     
+        "value": 5274 
+    },
+    { 
+        "ano": 2016, 
+        "key": "Colisao",           
+        "value": 36050
+    },
+    { 
+        "ano": 2016, 
+        "key": "Despiste",          
+        "value": 10879
+    },
+    { 
+        "ano": 2017, 
+        "key": "Atropelamento",     
+        "value": 5370 
+    },
+    { 
+        "ano": 2017, 
+        "key": "Colisao",           
+        "value": 38950
+    },
+    { 
+        "ano": 2017, 
+        "key": "Despiste",          
+        "value": 11694
+    },
+    { 
+        "ano": 2018, 
+        "key": "Atropelamento",     
+        "value": 5367 
+    },
+    { 
+        "ano": 2018, 
+        "key": "Colisao",           
+        "value": 38048
+    },
+    { 
+        "ano": 2018, 
+        "key": "Despiste",          
+        "value": 11865
+    },
+    { 
+        "ano": 2019, 
+        "key": "Atropelamento",     
+        "value": 5706 
+    },
+    { 
+        "ano": 2019, 
+        "key": "Colisao",           
+        "value": 54693
+    },
+    { 
+        "ano": 2019, 
+        "key": "Despiste",          
+        "value": 12633
+    },
+    { 
+        "ano": 2020, 
+        "key": "Atropelamento",     
+        "value": 3790 
+    },
+    { 
+        "ano": 2020, 
+        "key": "Colisao",           
+        "value": 29799
+    },
+    { 
+        "ano": 2020, 
+        "key": "Despiste",          
+        "value": 10444
+    }
+]
