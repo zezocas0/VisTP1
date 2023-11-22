@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+    <script src="http://d3js.org/d3.v6.js"></script>
     <title>Woody - Carpenter Website Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
@@ -57,17 +58,6 @@
                 <a href="acidentes.html" class="nav-item nav-link">Acidentes em Portugal</a>
                 <a href="tipo_de_via.html" class="nav-item nav-link">Acidentes por tipo de via</a>
                 <a href="tipo_de_veiculo.html" class="nav-item nav-link">Acidentes por tipo de veiculo</a>
-                  <!-- <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                    <div class="dropdown-menu fade-up m-0">
-                        <a href="feature.html" class="dropdown-item">Feature</a>
-                        <a href="quote.html" class="dropdown-item">Free Quote</a>
-                        <a href="team.html" class="dropdown-item">Our Team</a>
-                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                        <a href="404.html" class="dropdown-item">404 Page</a>
-                    </div>
-                </div> -->
-                 <!-- <a href="contact.html" class="nav-item nav-link">Contact</a> -->
             </div>
         </div>
     </nav>
@@ -113,19 +103,13 @@
     </div>
     <!-- Carousel End -->
 
-    <!-- About Start -->
-    <div class="container-fluid bg-light overflow-hidden my-5 px-lg-0">
-        <div class="container about px-lg-0">
-            <div class="row g-0 mx-lg-0">
-                <div class="col-lg-6 ps-lg-0" style="min-height: 400px;">
-                </div>
-                <div class="col-lg-6 about-text py-5 wow fadeIn" data-wow-delay="0.5s">
-                   <!--Colocar o grafico aqui --> 
-                </div>
-            </div>
+    <div class="container-fluid bg-light overflow-hidden px-lg-0" style="min-height: 2500px;">
+        <div class="container regioes px-lg-0">
+            <h1 class="color">Acidentes por regiões de Portugal</h1>
+            <h5 class="text-darker mb-4 text-center mt-4 smaller-text"> Nesta página é possível observar uma visualização com o número de acidentes por regiões em Portugal.</h5>
+            <div class="chartContainer4"></div>
         </div>
     </div>
-    <!-- About End -->
 
 
     <!-- Footer Start -->
@@ -143,16 +127,6 @@
                         <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
-                <!--
-                <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Services</h4>
-                    <a class="btn btn-link" href="">General Carpentry</a>
-                    <a class="btn btn-link" href="">Furniture Remodeling</a>
-                    <a class="btn btn-link" href="">Wooden Floor</a>
-                    <a class="btn btn-link" href="">Wooden Furniture</a>
-                    <a class="btn btn-link" href="">Custom Carpentry</a>
-                </div>
-                -->
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Quick Links</h4>
                     <a class="btn btn-link" href="">About Us</a>
@@ -190,6 +164,45 @@
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-0 back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <script>
+        d3.json("data/Portugal.json")
+            .then(draw)
+            .catch(err => { console.log(err) });
+        
+        function draw(geo_data) {
+            let margin = 75,
+                width = 1400 - margin,
+                height = 600 - margin;
+
+            let svg = d3.select("#chartContainer4").append("svg")
+                .attr("width", width + margin)
+                .attr("height", height + margin)
+                .append('g')
+                .attr('class', 'map');
+                    
+            var projection = d3.geoMercator()
+                .center([-20, 40])
+                .scale(2000)
+                .translate( [width / 2, height / 2]);
+            let path = d3.geoPath().projection(projection);
+            svg.append("path")
+                .attr("d", path(geo_data));
+            svg.style("fill","teal")
+                 .style("stroke","black")
+            
+            //draw outline of box around map
+            svg.append("rect")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("width", width)
+                .attr("height", height)
+                .style("stroke", "black")
+                .style("fill", "none")
+                .style("stroke-width", 1);
+        };
+    </script>
+
 
 
     <!-- JavaScript Libraries -->
