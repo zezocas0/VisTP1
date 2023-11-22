@@ -53,8 +53,21 @@
             <div class="chart-container">
                 <div id="yearFilter"></div>
                 <div id="chartContainer">
-                    <h4 class="text-dark mb-4 fs-4" style="position: absolute; top: -40px; left: 50%; transform: translateX(-50%);">Acidentes por tipo de via</h4>
-                    <!-- Fim do título -->
+                    <h4 class="text-dark mb-4 fs-4" style="position: absolute; top: -170px; left: 50%; transform: translateX(-50%);">Acidentes por tipo de via</h4>
+                </div>
+                <div id="legendContainer">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: blue;"></div>
+                        <div class="legend-text">VM: Vitimas mortais</div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgb(242, 103, 17);"></div>
+                        <div class="legend-text">FG: Feridos graves</div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgb(29, 163, 5);"></div>
+                        <div class="legend-text">FL: Feridos ligeiros</div>
+                    </div>
                 </div>
                 <div id="chartContainer2">
                 </div>
@@ -201,11 +214,10 @@
             
         d3.select("#chartContainer").selectAll("svg").remove();
         
-        
-        
+    
         const width = 800;
         const height = 600;
-        const marginLeft = 40;
+        const marginLeft = 80;
         const marginRight = 10;
         const marginBottom = 40;
         
@@ -225,9 +237,6 @@
         // add the x and y lines to the svg
         const xAxis = d3.axisBottom(x);
         const yAxis = d3.axisLeft(y).ticks(5);
-
-         
-        
         
         const categories = ["VM", "FG", "FL"];
         const color = d3.scaleOrdinal()
@@ -267,18 +276,22 @@
         svg.append("g")
             .attr("transform", `translate(0,${height - marginBottom})`)
             .call(d3.axisBottom(x))
-            .call(g => g.selectAll(".domain").remove());
+            .call(g => g.selectAll(".domain").remove())
+            .selectAll("text")
+            .attr("font-size", 16)
+            .attr("font-weight", "bold") // Ajuste a espessura da fonte (negrito)
+            .attr("fill", "black"); // Ajuste a cor do texto conforme necessário
     
         svg.append("g")
             .attr("transform", `translate(${marginLeft},0)`)
             .call(d3.axisLeft(y).ticks(5))
-            .call(g => g.selectAll(".domain").remove());
+            .call(g => g.selectAll(".domain").remove())
+            .selectAll("text")
+            .attr("font-size", 13)
+            .attr("font-weight", "bold") // Ajuste a espessura da fonte (negrito)
+            .attr("fill", "black"); // Ajuste a cor do texto conforme necessário
     }
 
-
-
-
-        
 
         function drawPieChart(selectedYear) {
             const w = 150;
@@ -355,7 +368,7 @@
                     .attr('width', 18)
                     .attr('height', 18)
                     .style('fill', d => color(d.data.key));
-            
+                
                 legend.append('text')
                     .attr('x', w + 10)
                     .attr('y', 9)
@@ -399,6 +412,7 @@
                 .attr("class","x axis")
                 .attr("transform","translate(0," + ( h -margin ) + ")")
                 .call(x_axis)
+                
 
             d3.select("svg")
                 .append("g")
@@ -425,8 +439,8 @@
         
 
         function draw_acidents_via(data) {
-            let w = 1000, h = 600; // width and height
-            margin=50;
+            let w = 1200, h = 550; // width and height
+            margin=75;
 
 
             let svg = d3.select('#chartContainer2').append('svg')
@@ -463,7 +477,10 @@
                 .attr("x", (w / 2))             
                 .attr("y",  (margin / 2))
                 .attr("text-anchor", "middle")  
-                .text("Acidentes por tipo de via ");
+                .text("Acidentes por tipo de via ")
+                .style("font-size", "18px") // Ajusta o tamanho da fonte
+                .style("font-weight", "bold") // Deixa o texto em negrito
+                .style("fill", "#333"); // Cor mais escura
                         
             let circles_Arruamento = svg.selectAll(".Arruamento")
                 .data(data)
@@ -565,6 +582,30 @@
             svg.append("path")
                 .attr("d",line_Outras_vias(data))
                 .attr("class","Outras_vias");
+
+            svg.selectAll(".axis").style("stroke-width", "3px");
+            svg.selectAll(".axis text").style("font-size", "14px");
+
+            // legenda no eixo X
+            svg.append("text")
+                .attr("transform", "translate(" + (w / 2) + " ," + (h - 20) + ")")
+                .style("text-anchor", "middle")
+                .text("Anos")  
+                .style("font-size", "16px") // Ajusta o tamanho da fonte
+                .style("font-weight", "bold") // Deixa o texto em negrito
+                .style("fill", "#333");
+
+            // legenda no eixo Y
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0)
+                .attr("x", 0 - (h / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text("Número de Acidentes")
+                .style("font-size", "16px") // Ajusta o tamanho da fonte
+                .style("font-weight", "bold") // Deixa o texto em negrito
+                .style("fill", "#333");
             }
     </script>
 

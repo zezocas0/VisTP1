@@ -328,8 +328,6 @@
     --ciclomotores_color:darkorange;       /* para as estradas municipais*/
         
     --motrociclos_color:orangered; /* para as estradas nacionais*/
-
-
 }
         
 /* para os arruamentos*/
@@ -365,7 +363,6 @@ circle.Municipal{
     fill: var(--Emunicipal_color);
     opacity: 0.6;
 }
-
 
 /* para as estradas nacionais*/
 path.Nacional{
@@ -465,10 +462,41 @@ circle.Outras_vias {
     opacity: 0.6;
 }
 
+
+
+#legendContainer {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 27%;
+    right: -45px;
+}
+
+.legend-item {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.legend-color {
+    width: 18px;
+    height: 18px;
+    margin-right: 5px;
+}
+
 .pie-chart {
     position: absolute;
     right: 100px; /* Ajuste a posição conforme necessário */
-    top: 250px; /* Ajuste a posição conforme necessário */
+    top: 380px; /* Ajuste a posição conforme necessário */
+}
+
+
+.chart-container {
+    position: relative;
+}
+
+#chartContainer {
+    margin-top: 200px; /* Ajuste a margem superior conforme necessário */
+    margin-left: 250px;
 }
 
 #chartContainer2{
@@ -478,25 +506,36 @@ circle.Outras_vias {
     height: 600px; /* Adjust the height as needed */
 }
 
-.chart-container {
-    position: relative;
-}
-
-#chartContainer {
-    margin-top: 100px; /* Ajuste a margem superior conforme necessário */
-    margin-left: 300px;
-    
-}
-
 #yearFilter {
     position: absolute;
     top: 20%;
-    left: 1.5%;
-    transform: translate(0, -50%);
-    width: 70px;
-    height: 400px;
-    margin-left: 50px;
+    left: -2%;
+    transform: translate(0, -40%);
+    width: 110px; /* Largura do filtro */
+    padding: 10px;
     border: 2px solid black;
+    border-radius: 5px;
+}
+
+.radio-row {
+    margin-bottom: 8px;
+}
+
+label {
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 16px; /* Tamanho de fonte maior para 2007 e 2008 */
+    font-weight: bold; /* Texto em negrito para 2007 e 2008 */
+    color: #333; /* Cor mais escura para 2007 e 2008 */
+}
+
+input {
+    margin-left: 7px;
+}
+
+/* Estilo para quando o mouse passa por cima */
+label:hover {
+    background-color: #e0e0e0;
 }
 
 
