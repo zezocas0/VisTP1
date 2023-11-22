@@ -4,7 +4,15 @@
     <head>
         <meta charset="utf-8">
         <script src="http://d3js.org/d3.v6.js"></script>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="Tipo_Via_Style.css">
         <style>
+            body {
+                background-color: #fffafa; /* Light gray background */
+                color: #000000; /* Dark text color */
+                font-family: Arial, sans-serif; /* Choose a suitable font */
+                margin: 0; /* Reset default margin */
+            }
             :root{
     
                 --Total_color: royalblue; /* para os valores totais */
@@ -20,32 +28,7 @@
                 --IPIC_color:mediumvioletred;    /* para as ips e ics*/
             
                 --Outras_color:crimson;/* para as outras*/
-            
-            
             }
-            #yearFilter {
-                position: fixed;
-                top: 50%;
-                left: 1.5%;
-                transform: translate(0, -50%);
-                width: 70px;
-                height: 400px;
-                border: 2px solid black;
-            }
-
-
-            .checkbox-row {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                margin-bottom: 5px;
-                margin-left: 10px;
-            }
-
-            .checkbox-row .checkbox {
-                margin-right: 10px;
-            }
-
                     
             /* para os arruamentos*/
             path.Vligeiros{
@@ -65,40 +48,40 @@
                 stroke-width: 2px;
                 fill:none;
             }
-            circleVpesados{
+            circle.Vpesados{
                 fill: var(--autoestrada_color);
                 opacity: 0.6;
             }
 
             /* para as estradas municipais*/
-            path.Municipal{
+            path.velocipedes{
                 stroke:var(--Emunicipal_color);
                 stroke-width: 2px;
                 fill:none;
             }
-            circle.Municipal{
+            circle.velocipedes{
                 fill: var(--Emunicipal_color);
                 opacity: 0.6;
             }
             
             
             /* para as estradas nacionais*/
-            path.Nacional{
+            path.ciclomotores{
                 stroke:var(--Enacional_color);
                 stroke-width: 2px;
                 fill:none;
             }
-            circle.Nacional{
+            circle.ciclomotores{
                 fill: var(--Enacional_color);
                 opacity: 0.6;
             }
             /* para as ips e ics*/
-            path.IPIC{
+            path.motrociclos{
                 stroke:var(--IPIC_color);
                 stroke-width: 2px;
                 fill:none;
             }
-            circle.IPIC{
+            circle.motrociclos{
                 fill: var(--IPIC_color);
                 opacity: 0.6;
             }
@@ -113,11 +96,45 @@
                 opacity: 0.6;
             }
             
-
             .pie-chart {
                 position: absolute;
                 right: 70px; /* Ajuste a posição conforme necessário */
                 top: 150px; /* Ajuste a posição conforme necessário */
+            }
+
+            /* Adiciona estilos para centralizar o gráfico */
+            .chart-container {
+                position: relative;
+                width: 70%; /* Largura desejada */
+                margin: auto;
+            }
+
+            #chartContainer {
+                margin-top: 250px; /* Ajuste a margem superior conforme necessário */
+                margin-left: 150px;
+            }
+
+            #yearFilter {
+                position: fixed;
+                top: 50%;
+                left: 1.5%;
+                transform: translate(0, -50%);
+                width: 70px;
+                height: 400px;
+                margin-left: 50px;
+                border: 2px solid black;
+            }
+
+            .checkbox-row {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                margin-bottom: 5px;
+                margin-left: 10px;
+            }
+
+            .checkbox-row .checkbox {
+                margin-right: 10px;
             }
 
             .svg-container {
@@ -128,9 +145,7 @@
 
             /* Add a black background color to the top navigation */
             .topnav {
-                background-color: #333;
-                overflow: hidden;
-                position: fixed;
+                background-color: rgb(8, 104, 164);
                 top: 0;
                 left: 0;
                 right: 0;
@@ -144,41 +159,70 @@
             
             .topnav a,
             .topnav h1 {
-                color: #f2f2f2;
-                text-decoration: none;
-                font-size: 17px;
-                padding: 14px 16px;
-                margin: 0; /* Reset default margins */
-                text-align: center;
+                color: #000000;
             }
 
             /* Change the color of links on hover */
             .topnav a:hover {
-                background-color: #ddd;
-                color: black;
+                background-color: #0056b3; /* Darker blue on hover */
+                color: #fff;
             }
 
             /* Add a color to the active/current link */
             .topnav a.active {
-                background-color: #04AA6D;
-                color: white;
+                background-color: #004080;
+            }
+
+            #lineContainer {
+                overflow: auto;
+                height: 600px; /* Adjust the height as needed */
             }
         </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="Homepage.html">Homepage</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                <a class="nav-link" href="tipo_de_veiculo.html">Tipo de veiculo </a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="tipo_de_via.html">tipo de viao</a>
+                </li>
+            </ul>
+            <a href="/acidentes-por-veiculo" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+                <h4 class="m-0 text-primary">Acidentes por veículo</h4>
+            </a> 
+        </div>
+      </nav>
+
+
+ <!--
     <div class="topnav">
         <a class="active" href="#home">Home</a>
-        <h1>Acidentes por tipo de veiculo</h1>
-        <a href="/acidentes-por-via" class="active">Acidentes por tipo de via</a>
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h2 class="m-0 text-primary">Home</h2>
+        </a>
+        <h1>Acidentes por tipo de via</h1>
+        <a href="/acidentes-por-veiculo" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h4 class="m-0 text-primary">Acidentes por veículo</h4>
+        </a>
+    </div>
+    -->
+    <!-- Envolve o filtro e o gráfico em uma div -->
+    <div class="chart-container">
+        <div id="yearFilter"></div>
+        <div id="chartContainer"></div>
+        <div id="lineContainer">  </div>
     </div>
 
-
-    <div id="yearFilter"></div>
- 
-
-    <button id="TotalorOthersButton">change between total and all others </button>
+    
     <script>
-
         // Initial data load and visualization
         d3.csv("data/PORDATA_Acidentes-por-tipo-de-veiculo.csv")
         .then(draw)
@@ -186,56 +230,209 @@
             console.log(err);
         });
 
+        const width = 800;
+        const height = 600;
+        const marginLeft = 40;
+        const marginRight = 10;
+        const marginBottom = 40; // Aumente a margem inferior para acomodar os rótulos do eixo y
+
+
         const yearFilter = document.getElementById("yearFilter");
-        const years = [2007,2008,2009,2010,2011,2012, 2013, 2014, 2015,2016,2017,2018,2019,2020,2021,2022];
+        const years = [2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020];
+        
+        // Create a container div with a specific height
+        yearFilter.style.overflow = "auto"; // Add overflow property
 
         for (const year of years) {
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.value = year;
-
+            const radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = "year"; // Set the same name for all radio buttons in the group
+            radio.value = year;
+        
             const label = document.createElement("label");
             label.textContent = year;
-            label.appendChild(checkbox);
-
-            const checkboxRow = document.createElement("div");
-            checkboxRow.classList.add("checkbox-row");
-            checkboxRow.appendChild(label);
-
-            yearFilter.appendChild(checkboxRow);
+            label.appendChild(radio);
+        
+            const radioRow = document.createElement("div");
+            radioRow.classList.add("radio-row");
+            radioRow.appendChild(label);
+        
+            // Append the container to the yearFilter
+            yearFilter.appendChild(radioRow);
         }
-
-        // com base no exemplo 3.2 de as aulas.
-        let width = 1800;
-        let height = 1080;
-        let margin = 100;
-
+        
+        
         function draw(data) {
 
             const yearFilter = d3.select("#yearFilter");
 
             yearFilter.on("change", () => {
-                const selectedYears = [];
-                yearFilter.selectAll(".yearCheckbox:checked").each((d) => {
-                    selectedYears.push(d.value);
+                const selectedYear = [];
+                yearFilter.selectAll("input:checked").each(function() {
+                    selectedYear.push(+this.value);
                 });
+            
+                //console.log(selectedYear);
+                if (selectedYear.length > 0) {
+                    draw_stacked_bar_chart(selectedYear);
+                    drawPieChart();
+                } else {
+                    // Handle the case where no checkboxes are selected
+                    console.log("No year selected");
+                }
             });
-
-            draw_acidents_via(data);
-            //draw_acidentes_total_via(data);
-            drawPieChart();
-            //updateChart(data);
+            
+        
+            draw_stacked_bar_chart(2007);
+            draw_acidents_via(data); 
+            drawPieChart(2007);
         }
+        
 
-        function drawPieChart() {
+        // Grafico de barras agrupado num respetivo ano
+        async function draw_Acidentes_via_porAno() {
+            const width = 800;
+            const height = 600;
+            const marginLeft = 40;
+            const marginRight = 10;
+            const marginBottom = 40; // Aumente a margem inferior para acomodar os rótulos do eixo y
+
+            const data = await d3.csv("data/ansr_dados_tipo-de-veiculo.csv", d3.autoType);
+            const data2007 = data.filter(d => d.ano === 2007);
+
+            // Configuração das escalas
+            const x = d3.scaleBand()
+                .domain(data2007.map(d => d.Tipo_de_via))
+                .rangeRound([marginLeft, width - marginRight])
+                .paddingInner(0.1);
+
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(data2007, d => d3.max([d.VM, d.FG, d.FL]))])
+                .range([height - marginBottom, 0]);
+
+            const categories = ["VM", "FG", "FL"];
+            const color = d3.scaleOrdinal()
+            .domain(categories)
+            .range(d3.schemeCategory10);
+            let svg = d3.select("#chartContainer").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+                
+                // Itera sobre as categorias
+                categories.forEach((categoria, i) => {
+                // Seleciona os dados correspondentes à categoria
+                const dataCategoria = data2007.map(d => ({
+                    categoria: categoria,
+                    value: d[categoria],
+                    tipoDeVia: d.Tipo_de_via
+                }));
+                
+                console.log(dataCategoria);
+
+                
+                // Cria as barras para a categoria
+                svg.selectAll(".bar-" + categoria)
+                .data(dataCategoria)
+                .enter().append("rect")
+                    .attr("class", "bar bar-" + categoria)
+                    .attr("x", d => x(d.tipoDeVia) + x.bandwidth() / categories.length * i)
+                    .attr("y", d => y(d.value))
+                    .attr("width", x.bandwidth() / categories.length) // Ajusta a largura
+                    .attr("height", d => height - marginBottom - y(d.value))
+                    .attr("fill", color(categoria));
+                });
+                
+                // Adiciona eixos
+                svg.append("g")
+                .attr("transform", `translate(0,${height - marginBottom})`)
+                .call(d3.axisBottom(x))
+                .call(g => g.selectAll(".domain").remove());
+                
+                svg.append("g")
+                .attr("transform", `translate(${marginLeft},0)`)
+                .call(d3.axisLeft(y).ticks(5))
+                .call(g => g.selectAll(".domain").remove());
+            }
+        
+    // Grafico de barras agrupado num respetivo ano
+    async function draw_stacked_bar_chart(selectedYear) {
+        d3.select("#chartContainer").selectAll("svg").remove();
+
+        const width = 800;
+        const height = 600;
+        const marginLeft = 40;
+        const marginRight = 10;
+        const marginBottom = 40;
+
+        const data = await d3.csv("data/ansr_dados_tipo-de-veiculo.csv", d3.autoType);
+        const filteredData = data.filter(d => d.ano == selectedYear);
+
+        const x = d3.scaleBand()
+            .domain(filteredData.map(d => d.Tipo_de_Veiculo))
+            .range([marginLeft, width - marginRight])
+            .paddingInner(0.1);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(filteredData, d => d3.max([d.Atropelamento, d.Colisao, d.Despiste]))])
+            .range([height - marginBottom, 0]);
+
+        const categories = ["Atropelamento", "Colisao", "Despiste"];
+        const color = d3.scaleOrdinal()
+            .domain(categories)
+            .range(d3.schemeCategory10);
+
+        const svg = d3.select("#chartContainer").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        const stackedData = d3.stack()
+            .keys(categories)
+            .order(d3.stackOrderNone)
+            .offset(d3.stackOffsetNone)(filteredData);
+
+        svg.append("text")
+            .attr("x", (width / 2))
+            .attr("y", (marginBottom / 2))
+            .attr("text-anchor", "middle")
+            .text("Tipo de acidente no ano " + selectedYear);
+
+        svg.selectAll(".bar")
+            .data(stackedData)
+            .enter().append("g")
+            .attr("class", "bar")
+            .attr("fill", d => color(d.key))
+            .selectAll("rect")
+            .data(d => d)
+            .enter().append("rect")
+            .attr("x", d => x(d.data.Tipo_de_Veiculo))
+            .attr("y", d => y(d[1]))
+            .attr("height", d => y(d[0]) - y(d[1]))
+            .attr("width", x.bandwidth());
+
+        svg.append("g")
+            .attr("transform", `translate(0,${height - marginBottom})`)
+            .call(d3.axisBottom(x))
+            .call(g => g.selectAll(".domain").remove());
+
+        svg.append("g")
+            .attr("transform", `translate(${marginLeft},0)`)
+            .call(d3.axisLeft(y).ticks(5))
+            .call(g => g.selectAll(".domain").remove());
+    }
+
+
+
+
+
+        function drawPieChart(selectedYear) {
             const w = 150;
             const h = 150;
             const radius = Math.min(w, h) / 2;
 
             const data = [
-                { key: 'VM', value: 1 / 3 * 100 },
-                { key: 'FL', value: 1 / 3 * 100 },
-                { key: 'FG', value: 1 / 3 * 100 }
+                { key: 'Atropelamento', value: 1 / 3 * 100 },
+                { key: 'colisao', value: 1 / 3 * 100 },
+                { key: 'despiste', value: 1 / 3 * 100 }
             ];
 
             const color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -289,70 +486,13 @@
                 .text(d => d.data.key);
         }
 
-        function draw_acidentes_total_via(data) {
-            let w = 1000, h = 600; // width and height
-            
-            let svg = d3.select('body').append('svg')
-            .attr('width', w)
-            .attr('height', h);
-            
-            
-            // The scale does not have extent, as it need all the values
-            let x_extent = data.map(d => d.Ano);
-            let x_scale = d3.scalePoint()
-                .range([  margin ,w- margin])
-                .domain(x_extent);
-                
-            let y_extent = d3.extent(data, d => d.Total);
-            let y_scale = d3.scaleLinear()
-            .range([h - margin, margin])
-            .domain([0, y_extent[1]]);
-            
-            let circles_Total = svg.selectAll("circle")
-            .data(data)
-            .join("circle")
-            .attr("cx", d => x_scale(d.Ano))
-            .attr("cy", d => y_scale(d.Total))
-            .attr("r",  4)
-            .attr("class","Total")
-
-            let x_axis=d3.axisBottom(x_scale);
-            let y_axis=d3.axisLeft(y_scale);
-            
-            d3.select("svg")
-                .append("g")
-                .attr("class","x axis")
-                .attr("transform","translate(0," + ( h -margin ) + ")")
-                .call(x_axis)
-
-            d3.select("svg")
-                .append("g")
-                .attr("class","y axis")
-                .attr("transform","translate(" + margin + ",0)")
-                .call(y_axis)                   
-            
-
-            let line=d3.line()
-                .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.Total))
-            d3.select("svg")
-                .append("path")
-                .attr("d",line(data))
-                .attr("class","Total")
-                
-            svg.append("text")
-                .attr("x", (w / 2))             
-                .attr("y",  (margin / 2))
-                .attr("text-anchor", "middle")  
-                    .text("Acidentes por tipo de veiculo");
-                
-        }
-        
 
         function draw_acidents_via(data) {
             let w = 1000, h = 600; // width and height
-            
-            let svg = d3.select('body').append('svg')
+            margin=50;
+
+
+            let svg = d3.select('#lineContainer').append('svg')
             .attr('width', w)
             .attr('height', h);
             
@@ -387,41 +527,8 @@
                 .attr("y",  (margin / 2))
                 .attr("text-anchor", "middle")  
                 .text("Acidentes por tipo de veiculo ");
-            const legendData = [
-                { key: 'V. ligeiros', color: getComputedStyle(document.documentElement).getPropertyValue('--Arruamento_color') },
-                { key: 'V. pesados', color: getComputedStyle(document.documentElement).getPropertyValue('--autoestrada_color') },
-                { key: 'velocipedes', color: getComputedStyle(document.documentElement).getPropertyValue('--Emunicipal_color') },
-                { key: 'Ciclomotores', color: getComputedStyle(document.documentElement).getPropertyValue('--Enacional_color') },
-                { key: 'motrociclos', color: getComputedStyle(document.documentElement).getPropertyValue('--IPIC_color') },
-                { key: 'outros', color: getComputedStyle(document.documentElement).getPropertyValue('--Outras_color') },
-            ];  
-
-            
-            const legend = svg.selectAll('.legend')
-                .data(legendData)
-                .enter()
-                .append('g')
-                .attr('class', 'legend')
-                .attr('transform', (_, i) => `translate(${w - margin + 10}, ${i * 20 + margin})`);
-
-            legend.append('rect')
-                .attr('width', 18)
-                .attr('height', 18)
-                .style('fill', d => d.color);
-
-            legend.append('text')
-                .attr('x', 24)
-                .attr('y', 9)
-                .attr('dy', '.35em')
-                .style('text-anchor', 'start')
-                .text(d => d.key);
-
                         
-
-
-
-
-            let circles_Arruamento = svg.selectAll(".Vligeiros")
+            let circles_Vligeiros = svg.selectAll(".Vligeiros")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
@@ -430,15 +537,15 @@
                 .attr("class","Vligeiros")
 
             /// todo: definir detline1 e fazco uma linha d3 line e depois a partir do svg appendar a linha
-            let line_arruamento=d3.line()
+            let line_Vligeiros=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
                 .y((d,i)=>y_scale(d.Vligeiros))
 
             svg.append("path")
-                .attr("d",line_arruamento(data))
+                .attr("d",line_Vligeiros(data))
                 .attr("class","Vligeiros");
             
-            let circles_Autoestrada = svg.selectAll(".Vpesados")
+            let circles_Vpesados = svg.selectAll(".Vpesados")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
@@ -446,17 +553,17 @@
                 .attr("r",  4)
                 .attr("class","Vpesados")
             
-            let line_autoestrada=d3.line()
+            let line_Vpesados=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
                 .y((d,i)=>y_scale(d.Vpesados))
             
             svg.append("path")
-                .attr("d",line_autoestrada(data))
+                .attr("d",line_Vpesados(data))
                 .attr("class","Vpesados");
         
 
             // Dados acerca da estrada municipal
-            let circles_municipal = svg.selectAll(".velocipedes")
+            let circles_velocipedes = svg.selectAll(".velocipedes")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
@@ -464,59 +571,59 @@
                 .attr("r",  4)
                 .attr("class","velocipedes")
 
-            let line_municipal=d3.line()
+            let line_velocipedes=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
                 .y((d,i)=>y_scale(d.velocipedes))
             svg.append("path")
-                .attr("d",line_municipal(data))
+                .attr("d",line_velocipedes(data))
                 .attr("class","velocipedes");
             
             // Dados acerca da estrada Nacional
-            let circles_Nacional = svg.selectAll(".ciclomotores")
+            let circles_ciclomotores = svg.selectAll(".ciclomotores")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
                 .attr("cy", d => y_scale(d.ciclomotores))
                 .attr("r",  4)
-                .attr("class","Nacional")
+                .attr("class","ciclomotores")
             
-            let line_Nacional=d3.line()
+            let line_ciclomotores=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
                 .y((d,i)=>y_scale(d.ciclomotores))
             svg.append("path")
-                .attr("d",line_Nacional(data))
-                .attr("class","Nacional");
+                .attr("d",line_ciclomotores(data))
+                .attr("class","ciclomotores");
 
 
             // Dados acerca da IPIC
-            let circles_IPIC = svg.selectAll(".motrociclos")
+            let circles_motrociclos = svg.selectAll(".motrociclos")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
                 .attr("cy", d => y_scale(d.motrociclos))
                 .attr("r",  4)
-                .attr("class","IPIC")
+                .attr("class","motrociclos")
 
-            let line_IPIC=d3.line()
+            let line_motrociclos=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
                 .y((d,i)=>y_scale(d.motrociclos))
             svg.append("path")
-                .attr("d",line_IPIC(data))
+                .attr("d",line_motrociclos(data))
                 .attr("class","motrociclos");
 
                 
             // Dados acerca da Outras vias
-            let circles_Outras_vias = svg.selectAll(".outros")
+            let circles_Outras_vias = svg.selectAll(".Outras_vias")
                 .data(data)
                 .join("circle")
                 .attr("cx", d => x_scale(d.Ano))
-                .attr("cy", d => y_scale(d.outros))
+                .attr("cy", d => y_scale(d.Outras))
                 .attr("r",  4)
                 .attr("class","Outras_vias")
            
             let line_Outras_vias=d3.line()
                 .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.outros))
+                .y((d,i)=>y_scale(d.Outras))
 
             svg.append("path")
                 .attr("d",line_Outras_vias(data))

@@ -172,11 +172,16 @@
             .topnav a.active {
                 background-color: #004080;
             }
+
+            #lineContainer {
+                overflow: auto;
+                height: 600px; /* Adjust the height as needed */
+            }
         </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="Homepage.html">Homepage</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -184,13 +189,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="tipo_de_via.html">Tipo de via </a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
+                <a class="nav-link" href="tipo_de_veiculo.html">tipo de veiculo</a>
                 </li>
             </ul>
             <a href="/acidentes-por-veiculo" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
@@ -216,19 +218,10 @@
     <div class="chart-container">
         <div id="yearFilter"></div>
         <div id="chartContainer"></div>
+        <div id="lineContainer">  </div>
     </div>
 
-        <!-- Corrected closing tag for the line-container div -->
-        <div class="line-container">
-            <div id="empty"></div>
-            <div id="lineContainer"></div>
-        </div>
     
-    <div class="line-container">
-        <div id="empty"></div>
-        <div id="lineContainer"></div>
-    </div>
-
     <script>
         // Initial data load and visualization
         d3.csv("data/PORDATA_Acidentes-por-tipo-de-via.csv")
@@ -236,6 +229,13 @@
         .catch(function(err) {
             console.log(err);
         });
+
+        const width = 800;
+        const height = 600;
+        const marginLeft = 40;
+        const marginRight = 10;
+        const marginBottom = 40; // Aumente a margem inferior para acomodar os rótulos do eixo y
+
 
         const yearFilter = document.getElementById("yearFilter");
         const years = [2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020];
@@ -257,11 +257,10 @@
             radioRow.classList.add("radio-row");
             radioRow.appendChild(label);
         
+            // Append the container to the yearFilter
             yearFilter.appendChild(radioRow);
         }
         
-        // Append the container to the yearFilter
-        yearFilter.appendChild(radioContainer);
         
         function draw(data) {
 
@@ -273,7 +272,7 @@
                     selectedYear.push(+this.value);
                 });
             
-                console.log(selectedYear);
+                //console.log(selectedYear);
                 if (selectedYear.length > 0) {
                     draw_stacked_bar_chart(selectedYear);
                     drawPieChart();
@@ -285,7 +284,7 @@
             
         
             draw_stacked_bar_chart(2007);
-
+            draw_acidents_via(data); 
             drawPieChart();
         }
         
@@ -315,8 +314,7 @@
             const color = d3.scaleOrdinal()
             .domain(categories)
             .range(d3.schemeCategory10);
-            
-            const svg = d3.select("#chartContainer").append("svg")
+            let svg = d3.select("#chartContainer").append("svg")
                 .attr("width", width)
                 .attr("height", height);
                 
@@ -358,7 +356,7 @@
         
         
         // Grafico de barras agrupado num respetivo ano
-        async function draw_stacked_bar_chart(selectedYear) {
+    async function draw_stacked_bar_chart(selectedYear) {
             
         d3.select("#chartContainer").selectAll("svg").remove();
         
@@ -373,6 +371,7 @@
         const data = await d3.csv("data/ansr_dados_tipo-de-via.csv", d3.autoType);
         const filteredData = data.filter(d => d.ano == selectedYear);
     
+
         const x = d3.scaleBand()
             .domain(filteredData.map(d => d.Tipo_de_via))
             .rangeRound([marginLeft, width - marginRight])
@@ -381,11 +380,18 @@
         const y = d3.scaleLinear()
             .domain([0, d3.max(filteredData, d => d3.max([d.VM, d.FG, d.FL]))])
             .range([height - marginBottom, 0]);
-    
+                          
+        // add the x and y lines to the svg
+        const xAxis = d3.axisBottom(x);
+        const yAxis = d3.axisLeft(y).ticks(5);
+
+         
+        
+        
         const categories = ["VM", "FG", "FL"];
         const color = d3.scaleOrdinal()
-            .domain(categories)
-            .range(d3.schemeCategory10);
+        .domain(categories)
+        .range(d3.schemeCategory10);
     
         const svg = d3.select("#chartContainer").append("svg")
             .attr("width", width)
@@ -395,6 +401,14 @@
             .keys(categories)
             .order(d3.stackOrderNone)
             .offset(d3.stackOffsetNone)(filteredData);
+    
+        svg.append("text")
+            .attr("x", (width / 2))  // Use width instead of w
+            .attr("y", (marginBottom / 2))  // Use marginBottom instead of margin
+            .attr("text-anchor", "middle")
+            .text("Tipo de acidente no ano " + selectedYear);
+        
+
     
         svg.selectAll(".bar")
             .data(stackedData)
@@ -423,7 +437,7 @@
 
 
 
-        function drawPieChart() {
+        function drawPieChart(selectedYear) {
             const w = 150;
             const h = 150;
             const radius = Math.min(w, h) / 2;
@@ -547,8 +561,10 @@
 
         function draw_acidents_via(data) {
             let w = 1000, h = 600; // width and height
-            
-            let svg = d3.select('body').append('svg')
+            margin=50;
+
+
+            let svg = d3.select('#lineContainer').append('svg')
             .attr('width', w)
             .attr('height', h);
             
