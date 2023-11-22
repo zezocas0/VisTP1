@@ -61,11 +61,13 @@
             <h5 class="text-darker mb-4 text-center mt-4 smaller-text"> Nesta página é possível observar uma visualização com o número total de acidentes ao longo dos anos.</h5>
             <div class="chart-container">
                 <div id="chartContainer3"></div>
-                <button type="button" onclick="myFunction()" class="btn btn-primary py-2 position-absolute top-0 mt-4" style="right: -700px;">Tipo de via</button>
+                <div style="position: absolute; top: 120px; right: -5px;">
+                    <button type="button" onclick="redirectPage('tipo_de_via.html')" class="btn btn-primary py-2 mt-2 d-block" style="width: 140px; height: 40px; margin-bottom: 15px;">Tipo de via</button>
+                    <button type="button" onclick="redirectPage('tipo_de_veiculo.html')" class="btn btn-primary py-2 mt-2 d-block" style="width: 140px; height: 40px; margin-bottom: 15px;">Tipo de veículo</button>
+                </div>    
             </div>
         </div>
     </div>
-
 
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-light footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
@@ -211,21 +213,14 @@
                 .style("text-anchor", "middle")
                 .text("Número de Acidentes");
         }
-       
     </script>
 
-    <!--
 
-    
     <script>
-        function myFunction() {
-
-    }
+        function redirectPage(page) {
+            window.location.href = page;
+        }
     </script>
-
-    -->
-
-
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
