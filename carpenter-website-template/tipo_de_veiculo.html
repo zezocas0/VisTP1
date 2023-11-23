@@ -198,10 +198,10 @@
         d3.select("#chartContainer").selectAll("svg").remove();
 
         const width = 800;
-        const height = 600;
+        const height = 650;
         const marginLeft = 80;
         const marginRight = 10;
-        const marginBottom = 40;
+        const marginBottom = 60;
 
         const data = await d3.csv("data/ansr_dados_tipo-de-veiculo.csv", d3.autoType);
         const filteredData = data.filter(d => d.ano == selectedYear);
@@ -243,7 +243,6 @@
             .attr("font-size", 16)
             .attr("font-weight", "bold") // Ajuste a espessura da fonte (negrito)
             .attr("fill", "black"); // Ajuste a cor do texto conforme necessário
-        
 
         svg.append("g")
             .attr("transform", `translate(${marginLeft},0)`)
@@ -253,6 +252,29 @@
             .attr("font-size", 13)
             .attr("font-weight", "bold") // Ajuste a espessura da fonte (negrito)
             .attr("fill", "black"); // Ajuste a cor do texto conforme necessário
+        
+        // Legenda para os veiculos
+        svg.append("text")
+            .attr("transform", `translate(${width / 2}, ${height-2})`)
+            .style("text-anchor", "middle")
+            .text("Tipos de veículos")
+            .style("font-size", "16px")
+            .style("font-weight", "bold")
+            .style("fill", "#333");
+
+        // Legenda para o numero de acidentes
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0)
+            .attr("x", 0 - height / 2)
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Número de Acidentes")
+            .style("font-size", "16px")
+            .style("font-weight", "bold")
+            .style("fill", "#333");
+
+
 
         const tooltip = d3.select("#chartContainer").append("div")
             .attr("class", "tooltip")
@@ -304,7 +326,6 @@
                     .duration(500)
                     .style("opacity", 0);
             });
-
     }
 
 
@@ -397,10 +418,18 @@
             let w = 1200, h = 550; // width and height
             margin=75;
 
-
             let svg = d3.select('#chartContainer2').append('svg')
             .attr('width', w)
             .attr('height', h);
+
+            let colors = {
+                Ligeiros: 'lightgreen',
+                Pesados: 'rgb(0, 57, 114)',
+                Velocipedes: 'darkorange',
+                Ciclomotores: 'orangered',
+                Motociclos: 'mediumvioletred',
+                Outras: 'rgb(20, 220, 210)'
+            };
         
             // The scale does not have extent, as it need all the values
             let x_extent = data.map(d => d.Ano);
@@ -408,11 +437,10 @@
                 .range([  margin ,w- margin])
                 .domain(x_extent);
                 
-            let y_extent = d3.extent(data, d => d.Vligeiros);
+            let y_extent = d3.extent(data, d => d.Ligeiros);
             let y_scale = d3.scaleLinear()
-            .range([h - margin, margin])
-            .domain([0, y_extent[1]]);
-            
+                .range([h - margin, margin])
+                .domain([0, y_extent[1]]);
 
             let x_axis=d3.axisBottom(x_scale);
             let y_axis=d3.axisLeft(y_scale);
@@ -436,106 +464,6 @@
                 .style("font-weight", "bold") // Deixa o texto em negrito
                 .style("fill", "#333"); // Cor mais escura
                         
-            let circles_Vligeiros = svg.selectAll(".Vligeiros")
-                .data(data)
-                .join("circle")
-                .attr("cx", d => x_scale(d.Ano))
-                .attr("cy", d => y_scale(d.Vligeiros))
-                .attr("r",  4)
-                .attr("class","Vligeiros")
-
-            let line_Vligeiros=d3.line()
-                .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.Vligeiros))
-
-            svg.append("path")
-                .attr("d",line_Vligeiros(data))
-                .attr("class","Vligeiros");
-            
-            let circles_Vpesados = svg.selectAll(".Vpesados")
-                .data(data)
-                .join("circle")
-                .attr("cx", d => x_scale(d.Ano))
-                .attr("cy", d => y_scale(d.Vpesados))
-                .attr("r",  4)
-                .attr("class","Vpesados")
-            
-            let line_Vpesados=d3.line()
-                .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.Vpesados))
-            
-            svg.append("path")
-                .attr("d",line_Vpesados(data))
-                .attr("class","Vpesados");
-        
-
-            // Dados acerca da estrada municipal
-            let circles_velocipedes = svg.selectAll(".velocipedes")
-                .data(data)
-                .join("circle")
-                .attr("cx", d => x_scale(d.Ano))
-                .attr("cy", d => y_scale(d.velocipedes))
-                .attr("r",  4)
-                .attr("class","velocipedes")
-
-            let line_velocipedes=d3.line()
-                .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.velocipedes))
-            svg.append("path")
-                .attr("d",line_velocipedes(data))
-                .attr("class","velocipedes");
-            
-            // Dados acerca da estrada Nacional
-            let circles_ciclomotores = svg.selectAll(".ciclomotores")
-                .data(data)
-                .join("circle")
-                .attr("cx", d => x_scale(d.Ano))
-                .attr("cy", d => y_scale(d.ciclomotores))
-                .attr("r",  4)
-                .attr("class","ciclomotores")
-            
-            let line_ciclomotores=d3.line()
-                .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.ciclomotores))
-            svg.append("path")
-                .attr("d",line_ciclomotores(data))
-                .attr("class","ciclomotores");
-
-
-            // Dados acerca da IPIC
-            let circles_motrociclos = svg.selectAll(".motrociclos")
-                .data(data)
-                .join("circle")
-                .attr("cx", d => x_scale(d.Ano))
-                .attr("cy", d => y_scale(d.motrociclos))
-                .attr("r",  4)
-                .attr("class","motrociclos")
-
-            let line_motrociclos=d3.line()
-                .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.motrociclos))
-            svg.append("path")
-                .attr("d",line_motrociclos(data))
-                .attr("class","motrociclos");
-
-                
-            // Dados acerca da Outras vias
-            let circles_Outras_vias = svg.selectAll(".Outras_vias")
-                .data(data)
-                .join("circle")
-                .attr("cx", d => x_scale(d.Ano))
-                .attr("cy", d => y_scale(d.Outras))
-                .attr("r",  4)
-                .attr("class","Outras_vias")
-           
-            let line_Outras_vias=d3.line()
-                .x((d,i)=>x_scale(d.Ano))
-                .y((d,i)=>y_scale(d.Outras))
-
-            svg.append("path")
-                .attr("d",line_Outras_vias(data))
-                .attr("class","Outras_vias");
-
             svg.selectAll(".axis").style("stroke-width", "3px");
             svg.selectAll(".axis text").style("font-size", "14px");
 
@@ -559,102 +487,59 @@
                 .style("font-weight", "bold") // Deixa o texto em negrito
                 .style("fill", "#333"); // Cor mais escura
 
-            // legenda para a os Vligeiros com a cor usada para a representar num quadrado de lado no lado direito do svg
-            svg.append("rect")
-                .attr("x", w - 100)
-                .attr("y", 0)
-                .attr("width", 10)
-                .attr("height", 10)
-                //obter cor da var --Vligeiros_color do css
-                .style("fill", "var(--Vligeiros_color)")
+            const tooltip = d3.select("#chartContainer2").append("div")
+                .attr("class", "tooltip")
+                .style("position", "absolute")
+                .style("opacity", 0)
+                .style("pointer-events", "none")
+                .style("background-color", "white")
+                .style("padding", "10px")
+                .style("border", "1px solid #ccc")
+                .style("border-radius", "5px");
 
-            svg.append("text")
-                .attr("x", w - 85)
-                .attr("y", 10)
-                .text("ligeiros")
-                .style("font-size", "15px")
-                .attr("alignment-baseline", "middle")
-        
-            // legenda para a os Vpesados com a cor usada para a representar num quadrado de lado no lado direito do svg
-            svg.append("rect")
-                .attr("x", w - 100)
-                .attr("y", 20)
-                .attr("width", 10)
-                .attr("height", 10)
-                .style("fill", "var(--Vpesados_color)")    
-            svg.append("text")
-                .attr("x", w - 85)
-                .attr("y", 30)
-                .text("pesados")
-                .style("font-size", "15px")
-                .attr("alignment-baseline", "middle")
+            // Tipos de veiculos
+            let types = ['Ligeiros', 'Pesados', 'Velocipedes', 'Ciclomotores', 'Motociclos', 'Outras'];
 
-            // legenda para a os velocipedes com a cor usada para a representar num quadrado de lado no lado direito do svg
-            svg.append("rect")
-                .attr("x", w - 100)
-                .attr("y", 40)
-                .attr("width", 10)
-                .attr("height", 10)
-                .style("fill", "var(--velocipedes_color)")
+            types.forEach(type => {
+                svg.selectAll(`.${type}`)
+                    .data(data)
+                    .join("circle")
+                    .attr("cx", d => x_scale(d.Ano))
+                    .attr("cy", d => y_scale(d[type]))
+                    .attr("r", 4)
+                    .attr("class", type)
+                    .style("fill", colors[type])
+                    .on("mouseover", (event, d) => {
 
-            svg.append("text")
-                .attr("x", w - 85)
-                .attr("y", 50)
-                .text("velocipedes")
-                .style("font-size", "15px")
-                .attr("alignment-baseline", "middle")
-            
-            // legenda para a os ciclomotores com a cor usada para a representar num quadrado de lado no lado direito do svg
-            svg.append("rect")
-                .attr("x", w - 100)
-                .attr("y", 60)
-                .attr("width", 10)
-                .attr("height", 10)
-                .style("fill", "var(--ciclomotores_color)") 
-            
-            svg.append("text")
-                .attr("x", w - 85)
-                .attr("y", 70)
-                .text("ciclomotores")
-                .style("font-size", "15px")
-                .attr("alignment-baseline", "middle")
+                        const containerRect = document.getElementById("chartContainer2").getBoundingClientRect();
+                        const xPosition = event.pageX - containerRect.left;  // Adicione um pequeno deslocamento para a direita
+                        const yPosition = event.pageY - containerRect.top-10;  // Subtrai um pequeno deslocamento para cima
 
-            // legenda para a os motrociclos com a cor usada para a representar num quadrado de lado no lado direito do svg
-            svg.append("rect")
-                .attr("x", w - 100)
-                .attr("y", 80)
-                .attr("width", 10)
-                .attr("height", 10)
-                .style("fill", "var(--motrociclos_color)")
+                        tooltip.transition()
+                            .duration(200)
+                            .style("opacity", 0.9);
 
-            svg.append("text")
-                .attr("x", w - 85)
-                .attr("y", 90)
-                .text("motrociclos")
-                .style("font-size", "15px")
-                .attr("alignment-baseline", "middle")
+                        tooltip.html(`${type} em ${d.Ano}: ${d[type]}`)
+                            .style("left", xPosition + "px")
+                            .style("top", yPosition + "px");
+                    })
+                    .on("mouseout", () => {
+                        tooltip.transition()
+                            .duration(500)
+                            .style("opacity", 0);
+                    });
 
+                let line = d3.line()
+                    .x(d => x_scale(d.Ano))
+                    .y(d => y_scale(d[type]));
 
-            // legenda para a os Outras_vias com a cor usada para a representar num quadrado de lado no lado direito do svg
-            svg.append("rect")
-                .attr("x", w - 100)
-                .attr("y", 100)
-                .attr("width", 10)
-                .attr("height", 10)
-                .style("fill", "var(--Outras_color)")
-
-            svg.append("text")
-                .attr("x", w - 85)
-                .attr("y", 110)
-                .text("Outras")
-                .style("font-size", "15px")
-                .attr("alignment-baseline", "middle")
-            }
-
-
-            
-
-            
+                svg.append("path")
+                    .attr("d", line(data))
+                    .attr("class", type)
+                    .style("stroke", colors[type])
+                    .style("fill", "none");
+            });
+        }      
     </script>
 
 </body>
