@@ -107,8 +107,10 @@
         <div class="container regioes px-lg-0">
             <h1 class="color">Acidentes por regiões de Portugal</h1>
             <h5 class="text-darker mb-4 text-center mt-4 smaller-text"> Nesta página é possível observar uma visualização com o número de acidentes por regiões em Portugal.</h5>
-            <div id="chartContainer4"></div>
-                
+            <div class="chart-container" >
+                <div id="yearFilter"></div>
+                <div id="chartContainer4"></div>
+            </div>  
         </div>
     </div>
 
@@ -167,74 +169,220 @@
     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-0 back-to-top"><i class="bi bi-arrow-up"></i></a>
 
     <script>
-       // Load GeoJSON data
+
+
+        // Load GeoJSON data
         d3.json("data/Portugal.json")
-        .then(drawMap)
-        .catch(err => { console.log(err) });
+            .then(geoData => {
+                
+                // Load CSV data after drawing the map
+                d3.csv("data/ansr_dados_regiao.csv")
+                    .then(csvData => {
+                        let selectedYear = "2007"; // Default value
+                        drawMap(geoData,csvData,selectedYear);
+                        createYearFilter(csvData, selectedYear); // Create the year filter UI
+
+                        // Attach an event listener to update the map when a year is selected
+                        document.querySelectorAll('input[name="year"]').forEach((radio) => {
+                            radio.addEventListener('change', function () {
+                                selectedYear = this.value;
+                                drawData(geoData, csvData, selectedYear);
+                            });
+                        });
+
+                        // Draw the initial map with the default year
+                        drawData(geoData, csvData, selectedYear);
+                    })
+                    .catch(err => { console.log(err) });
+            })
+            .catch(err => { console.log(err) });
+            
+        function drawMap(geo_data,csvData,selectedYear) {
+            let margin = 75,
+                width = 1400 - margin,
+                height = 2000 - margin;
+        
+            let svg = d3.select("#chartContainer4").append("svg")
+                .attr("width", width + margin)
+                .attr("height", height + margin)
+                .append('g')
+                .attr('class', 'map');
+        
+            var projection = d3.geoMercator()
+                .center([-10, 39.5])
+                .scale(10000)
+                .translate([width / 2, height / 2]);
+        
+            let path = d3.geoPath().projection(projection);
+        
+            // Append a group for the map data
+            let map = svg.append("g").attr("class", "map")
+                .attr("transform", "translate(" + margin + "," + margin + ")"); // Apply translation here
+        
+            map.selectAll("path")
+                .data(geo_data.features)
+                .enter()
+                .append("path")
+                .attr("d", path)
+                .style("fill", d => {
+                    // Use the same color scale as in drawData
+                    let value = Math.random() * 10000; // Replace with your actual value
+                    return colorScale(value);
+                })
+                .style("stroke", "black");
+  
+            
+            
+           
+            const tooltip = d3.select("#chartContainer").append("div")
+                .attr("class", "tooltip")
+                .style("position", "absolute")
+                .style("opacity", 0)
+                .style("pointer-events", "none")
+                .style("background-color", "white")
+                .style("padding", "10px")
+                .style("border", "1px solid #ccc")
+                .style("border-radius", "5px");
+
+            map.selectAll("path")
+                .data(geo_data.features)
+                .enter()
+                .append("path")
+                .attr("d", path)
+                .style("fill", d => {
+                    let regionName = d.properties.name;
+                    let regionData = csvData.find(item => item.name === regionName && item.ano === selectedYear);
+                    return regionData ? colorScale(regionData.Total) : "gray";
+                })
+                .style("stroke", "black")
+                .on("mouseover", function (event, d) {
+                    let regionName = d.properties.name;
+                    let regionData = csvData.find(item => item.name === regionName && item.ano === selectedYear);
+        
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 0.9);
+        
+                    tooltip.html(regionName + "<br/>Total: " + (regionData ? regionData.Total : "N/A"))
+                        .style("left", (event.pageX + 5) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", function () {
+                    tooltip.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                });
 
 
-    function drawMap(geo_data) {
-        let margin = 75,
-            width = 1400 - margin,
-            height = 2000 - margin;
+            //legend
+            let legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("transform", "translate(" + (width - 200) + "," + 20 + ")"); // Adjust the translation for better positioning
+            
+            // Create a linear gradient for the legend
+            let gradient = legend.append("linearGradient")
+            .attr("id", "legendGradient")
+            .attr("x1", "0%")
+            .attr("x2", "100%")
+            .attr("y1", "0%")
+            .attr("y2", "0%");
+            
+            let minTotal = d3.min(csvData, d => (d.ano === selectedYear) ? +d.Total : Infinity);
+            let maxTotal = d3.max(csvData, d => (d.ano === selectedYear) ? +d.Total : -Infinity);
+            // Calculate the color stops based on the number of unique names in the CSV
+            let colorStops = d3.range(0, 1.25, 1 / (colorScale.domain().length - 1));
 
-        let svg = d3.select("#chartContainer4").append("svg")
-            .attr("width", width + margin)
-            .attr("height", height + margin)
-            .append('g')
-            .attr('class', 'map');
+            gradient.selectAll("stop")
+                .data(colorStops)
+                .enter().append("stop")
+                .attr("offset", d => d * 100 + "%")
+                .attr("stop-color", d => colorScale(d3.interpolate(colorScale.domain()[0], colorScale.domain()[1])(d)));
 
-        var projection = d3.geoMercator()
-            .center([-10, 39.5])
-            .scale(10000)
-            .translate([width / 2, height / 2]);
+            
 
-        let path = d3.geoPath().projection(projection);
+    
+            // Add a rectangle to show the gradient
+            legend.append("rect")
+                .attr("width", 200)
+                .attr("height", 20)
+                .style("fill", "url(#legendGradient)")
+                .style("fit", "center")
+                .style("stroke", "black");
+        
+            // Create text labels for legend
+            legend.selectAll("text")
+                .data([minTotal, maxTotal] ) // Use the min and max values from the color scale domain
+                .enter().append("text")
+                .attr("x", (d, i) => i * (200-20)) // Adjust the spacing between labels
+                .attr("y", 40) // Adjust the y-coordinate for better positioning
+                .style("font-size", "16px")
+                .text(d => d);
 
-        // Append a group for the map data
-        let map = svg.append("g").attr("class", "map")
-            .attr("transform", "translate(" + margin + "," + margin + ")"); // Apply translation here
-
-        map.selectAll("path")
-            .data(geo_data.features)
-            .enter()
-            .append("path")
-            .attr("d", path)
-            .style("fill", "teal")
-            .style("stroke", "black");
-
-    }
-
-
-        function drawData(csv_data) {
-        // Assuming "regiao" in the CSV corresponds to "name" in GeoJSON
-        let mergedData = geo_data.features.map(feature => {
-            let regionData = csv_data.find(d => d.regiao === feature.properties.name);
-            return {
-                ...feature,
-                properties: {
-                    ...feature.properties,
-                    data: regionData
+        }
+        
+        function drawData(geo_data, csv_data, selectedYear) {
+            // Map the CSV data by region name and year
+            let dataMap = new Map();
+            csv_data.forEach(d => {
+                // Filter data based on the selected year
+                if (d.ano === selectedYear) {
+                    dataMap.set(d.name, d);
                 }
-            };
-        });
-
-        // Now mergedData contains both GeoJSON and CSV data
-
-        // Add color to map based on Total
-        d3.select(".map")
-            .selectAll("path")
-            .data(mergedData)
-            .style("fill", d => {
-                // Use Total property for coloring
-                return colorScale(d.properties.data.Total);
             });
+            minTotal = d3.min(csv_data, d => (d.ano === selectedYear) ? +d.Total : Infinity);
+            maxTotal = d3.max(csv_data, d => (d.ano === selectedYear) ? +d.Total : -Infinity);
+
+            // Update the color scale domain based on the Total values
+            colorScale.domain([minTotal, maxTotal]);
+            
+        
+            // Update the fill color of each region based on Total from the CSV data
+            d3.selectAll(".map path")
+                .style("fill", d => {
+                    let regionName = d.properties.name;
+                    let regionData = dataMap.get(regionName);
+                    if (regionData) {
+                        return colorScale(regionData.Total);
+                    } else {
+                        return "gray"; // or any default color for regions without CSV data for the selected year
+                    }
+                });
+                // add label to the map with the colorscale legend, given the color and values used
+                
+            }
+             
+        //color scale for the map
+        let colorScale = d3.scaleLinear()
+            .range(["green", "red"]); // Adjust the range based on your color preference
+
+        function createYearFilter(csv_data, selectedYear) {
+            const yearFilter = document.getElementById("yearFilter");
+            //const years = Array.from(new Set(csv_data.map(d => d.ano))); // Extract unique years from CSV data
+            const years = [2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020];
+      
+            
+            for (const year of years) {
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = "year"; // Set the same name for all radio buttons in the group
+                radio.value = year;
+                radio.checked = year === selectedYear; // Check the radio button for the selected year
+
+                const label = document.createElement("label");
+                label.textContent = year;
+                label.appendChild(radio);
+
+                const radioRow = document.createElement("div");
+                radioRow.classList.add("radio-row");
+                radioRow.appendChild(label);
+
+                // Append the container to the yearFilter
+                yearFilter.appendChild(radioRow);
+            }
         }
 
-        // Define a color scale (customize as needed)
-        let colorScale = d3.scaleLinear()
-        .domain([0, 10000]) // Adjust the domain based on your data
-        .range(["white", "red"]); // Adjust the range based on your color preference
+
+
 
     </script>
 
