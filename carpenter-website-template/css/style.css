@@ -309,7 +309,7 @@
 
     --Arruamento_color:lightgreen;  /* para os arruamentos*/
     
-    --autoestrada_color:lightslategrey;       /* para as autoestradas*/
+    --autoestrada_color:rgb(0, 57, 114);       /* para as autoestradas*/
 
     --Emunicipal_color:darkorange;       /* para as estradas municipais*/
         
@@ -317,7 +317,7 @@
 
     --IPIC_color:mediumvioletred;    /* para as ips e ics*/
 
-    --Outras_color:crimson;/* para as outras*/
+    --Outras_color:rgb(20, 220, 210);/* para as outras*/
 
     --Vligeiros_color: royalblue; /* para os valores totais */
 
@@ -354,7 +354,7 @@ circle.Autoestrada{
 }
 
 /* para as estradas municipais*/
-path.Municipal{
+path.EMunicipal{
     stroke:var(--Emunicipal_color);
     stroke-width: 2px;
     fill:none;
@@ -365,7 +365,7 @@ circle.Municipal{
 }
 
 /* para as estradas nacionais*/
-path.Nacional{
+path.ENacional{
     stroke:var(--Enacional_color);
     stroke-width: 2px;
     fill:none;
@@ -462,14 +462,21 @@ circle.Outras_vias {
     opacity: 0.6;
 }
 
+#legendContainer2{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60%;
+    right: -25px;
 
+}
 
 #legendContainer {
     display: flex;
     flex-direction: column;
     position: absolute;
     top: 27%;
-    right: -45px;
+    right: 20px;
 }
 
 .legend-item {
@@ -485,7 +492,7 @@ circle.Outras_vias {
 
 .pie-chart {
     position: absolute;
-    right: 100px; /* Ajuste a posição conforme necessário */
+    right: 90px; /* Ajuste a posição conforme necessário */
     top: 380px; /* Ajuste a posição conforme necessário */
 }
 
@@ -500,8 +507,8 @@ circle.Outras_vias {
 }
 
 #chartContainer2{
-    margin-top: 100px;
-    margin-left: 100px;
+    margin-top: 70px;
+    margin-left: 30px;
     overflow: auto;
     height: 600px; /* Adjust the height as needed */
 }
