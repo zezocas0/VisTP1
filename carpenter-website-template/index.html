@@ -46,7 +46,7 @@
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0">
         <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <h2 class="m-0 text-primary">WooDY</h2>
+            <img src="img/Logo1.png" alt="Logotipo" width="120" height="75">
         </a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
@@ -73,11 +73,10 @@
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg-8 text-center">
-                                <h5 class="text-white text-uppercase mb-3 animated slideInDown">Welcome To WooDY</h5>
-                                <h1 class="display-3 text-white animated slideInDown mb-4">Best Carpenter & Craftsman Services</h1>
-                                <p class="fs-5 fw-medium text-white mb-4 pb-2">Vero elitr justo clita lorem. Ipsum dolor at sed stet sit diam no. Kasd rebum ipsum et diam justo clita et kasd rebum sea elitr.</p>
+                                <h5 class="text-white text-uppercase mb-3 animated slideInDown">Welcome To Acidentes em Portugal</h5>
+                                <h1 class="display-3 text-white animated slideInDown mb-4">Site para visualização de dados sobre acidentes ocorridos em Portugal</h1>
+                                <p class="fs-5 fw-medium text-white mb-4 pb-2">um ipsum et diam justo clita et kasd rebum sea elitr.</p>
                                 <a href="" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Read More</a>
-                                <a href="" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Free Quote</a>
                             </div>
                         </div>
                     </div>
@@ -211,7 +210,7 @@
             var projection = d3.geoMercator()
                 .center([-10, 39.5])
                 .scale(10000)
-                .translate([width / 2, height / 2]);
+                .translate([width / 2 , height / 2 - 300]);
         
             let path = d3.geoPath().projection(projection);
         
@@ -234,7 +233,7 @@
             
             
            
-            const tooltip = d3.select("#chartContainer").append("div")
+            const tooltip = d3.select("#chartContainer4").append("div")
                 .attr("class", "tooltip")
                 .style("position", "absolute")
                 .style("opacity", 0)

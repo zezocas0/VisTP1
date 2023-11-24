@@ -34,7 +34,7 @@
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0">
         <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <h2 class="m-0 text-primary"></h2>
+            <img src="img/Logo1.png" alt="Logotipo" width="120" height="75">
         </a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
@@ -132,7 +132,7 @@
             
                 //console.log(selectedYear);
                 if (selectedYear.length > 0) {
-                    draw_stacked_bar_chart(selectedYear,0);
+                    draw_stacked_bar_chart(selectedYear);
                     drawPieChart(selectedYear);
                 } else {
                     // Handle the case where no checkboxes are selected
@@ -141,7 +141,7 @@
             });
             
         
-            draw_stacked_bar_chart(2007,0);
+            draw_stacked_bar_chart(2007);
             draw_acidents_via(data); 
             drawPieChart([2007]);
         }
@@ -185,9 +185,6 @@
                     tipoDeVia: d.Tipo_de_via
                 }));
                 
-                console.log(dataCategoria);
-
-                
                 // Cria as barras para a categoria
                 svg.selectAll(".bar-" + categoria)
                 .data(dataCategoria)
@@ -217,7 +214,6 @@
         async function draw_stacked_bar_chart(selectedYear, selectedCategory) {
             
             d3.select("#chartContainer").selectAll("svg").remove();
-            
         
             const width = 800;
             const height = 600;
@@ -226,17 +222,33 @@
             const marginBottom = 40;
             
             const data = await d3.csv("data/ansr_dados_tipo-de-via.csv", d3.autoType);
-            const filteredData = data.filter(d => d.ano == selectedYear);
-        
+            let filteredData;
+            let y;
 
+            if(selectedCategory != null){
+                console.log("Selected Year:", selectedYear);
+                console.log("Selected Category:", selectedCategory);
+
+                filteredData = data
+                .filter(d => d.ano == selectedYear)
+                .map(d => ({ Tipo_de_via: d.Tipo_de_via, [selectedCategory]: d[selectedCategory] }));
+
+                console.log("Filtered Data:", filteredData);
+                y = d3.scaleLinear()
+                    .domain([0, d3.max(filteredData, d => d[selectedCategory])])
+                    .range([height - marginBottom, 0]);
+            }
+            else{
+                filteredData = data.filter(d => d.ano == selectedYear);
+                    y = d3.scaleLinear()
+                    .domain([0, d3.max(filteredData, d => d3.max([d.VM, d.FG, d.FL]))])
+                    .range([height - marginBottom, 0]);
+            }
             const x = d3.scaleBand()
                 .domain(filteredData.map(d => d.Tipo_de_via))
                 .rangeRound([marginLeft, width - marginRight])
                 .paddingInner(0.1);
         
-            const y = d3.scaleLinear()
-                .domain([0, d3.max(filteredData, d => d3.max([d.VM, d.FG, d.FL]))])
-                .range([height - marginBottom, 0]);
                             
             // add the x and y lines to the svg
             const xAxis = d3.axisBottom(x);
@@ -344,47 +356,7 @@
                             .style("opacity", 0);
                     });
                     
-                    if (selectedCategory === 0) {
-                        // Desenhe o gráfico completo
-                        svg.selectAll(".bar-group rect")
-                            .transition()
-                            .duration(500)
-                            .attr("y", d => y(d[1]))
-                            .attr("height", d => y(d[0]) - y(d[1]));
-                    } else {
-                        // Desenhe apenas a categoria selecionada
-                        svg.selectAll(`.bar-group rect:not(.${selectedCategory})`)
-                            .transition()
-                            .duration(500)
-                            .attr("y", y(0))
-                            .attr("height", 0);
-
-                        svg.selectAll(`.bar-group rect.${selectedCategory}`)
-                            .transition()
-                            .duration(500)
-                            .attr("y", d => y(d[1]))
-                            .attr("height", d => y(d[0]) - y(d[1]));
-                    }
-
-                    svg.append("g")
-                        .attr("transform", `translate(0,${height - marginBottom})`)
-                        .call(d3.axisBottom(x))
-                        .call(g => g.selectAll(".domain").remove())
-                        .selectAll("text")
-                        .attr("font-size", 16)
-                        .attr("font-weight", "bold")
-                        .attr("fill", "black");
-
-                    svg.append("g")
-                        .attr("transform", `translate(${marginLeft},0)`)
-                        .call(d3.axisLeft(y).ticks(5))
-                        .call(g => g.selectAll(".domain").remove())
-                        .selectAll("text")
-                        .attr("font-size", 13)
-                        .attr("font-weight", "bold")
-                        .attr("fill", "black");
-
-                }
+        }
 
 
         function drawPieChart(selectedYear) {
@@ -482,28 +454,10 @@
                         })
                         .on("click", function (event, d) {
                             const selectedCategory = d.data.key;
+                            console.log(selectedCategory);
                             draw_stacked_bar_chart(selectedYear, selectedCategory);
                         });
             })
-
-            function updateStackedBarChart(data,category) {
-                // Filtrar os dados originais com base na categoria clicada
-                const filteredData = data.filter(entry => entry.ano === selectedYear);
-                const stackedData = d3.stack()
-                    .keys([category])
-                    .order(d3.stackOrderNone)
-                    .offset(d3.stackOffsetNone)(filteredData);
-
-                // Selecionar as barras do gráfico de barras e atualizar os dados
-                d3.select("#chartContainer").selectAll(".bar")
-                    .data(stackedData)
-                    .selectAll("rect")
-                    .data(d => d)
-                    .transition()
-                    .duration(500)
-                    .attr("y", d => y(d[1]))
-                    .attr("height", d => y(d[0]) - y(d[1]));
-            }
         }
         
         

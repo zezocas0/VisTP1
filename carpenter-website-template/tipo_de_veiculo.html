@@ -34,7 +34,7 @@
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0">
         <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <h2 class="m-0 text-primary">WooDY</h2>
+            <img src="img/Logo1.png" alt="Logotipo" width="120" height="75">
         </a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
@@ -53,7 +53,7 @@
             <div class="chart-container">
                 <div id="yearFilter"></div>
                 <div id="chartContainer">
-                    <h4 class="text-dark mb-4 fs-4" style="position: absolute; top: -170px; left: 50%; transform: translateX(-50%);">Acidentes por tipo de via</h4>
+                    <h4 class="text-dark mb-4 fs-4" style="position: absolute; top: -170px; left: 50%; transform: translateX(-50%);">Acidentes por tipo de veículo</h4>
                 </div>
                 <div id="chartContainer2">
                 </div>
@@ -194,7 +194,7 @@
             }
         
     // Grafico de barras agrupado num respetivo ano
-    async function draw_stacked_bar_chart(selectedYear) {
+    async function draw_stacked_bar_chart(selectedYear, selectedVeiculo) {
         d3.select("#chartContainer").selectAll("svg").remove();
 
         const width = 800;
@@ -204,16 +204,29 @@
         const marginBottom = 60;
 
         const data = await d3.csv("data/ansr_dados_tipo-de-veiculo.csv", d3.autoType);
-        const filteredData = data.filter(d => d.ano == selectedYear);
+        let filteredData;
+        let y;
 
+        if(selectedVeiculo != null){
+            filteredData = data
+                .filter(d => d.ano == selectedYear)
+                .map(d => ({ Tipo_de_Veiculo: d.Tipo_de_Veiculo, [selectedVeiculo]: d[selectedVeiculo]}));
+            y = d3.scaleLinear()
+                .domain([0, d3.max(filteredData, d => d[selectedVeiculo])])
+                .range([height - marginBottom, 0]);
+        }
+        else{
+            filteredData = data.filter(d => d.ano == selectedYear);
+            y = d3.scaleLinear()
+                .domain([0, d3.max(filteredData, d => d3.max([d.Atropelamento, d.Colisao, d.Despiste]))])
+                .range([height - marginBottom, 0]);
+        }
+    
         const x = d3.scaleBand()
             .domain(filteredData.map(d => d.Tipo_de_Veiculo))
             .range([marginLeft, width - marginRight])
             .paddingInner(0.1);
 
-        const y = d3.scaleLinear()
-            .domain([0, d3.max(filteredData, d => d3.max([d.Atropelamento, d.Colisao, d.Despiste]))])
-            .range([height - marginBottom, 0]);
 
         const categories = ["Atropelamento", "Colisao", "Despiste"];
         const color = d3.scaleOrdinal()
@@ -233,7 +246,7 @@
             .attr("x", (width / 2))
             .attr("y", (marginBottom / 2))
             .attr("text-anchor", "middle")
-            .text("Tipo de acidente no ano " + selectedYear);
+            .text("Acidentes ocorridos por tipo de veículos no ano " + selectedYear);
 
         svg.append("g")
             .attr("transform", `translate(0,${height - marginBottom})`)
@@ -274,8 +287,6 @@
             .style("font-weight", "bold")
             .style("fill", "#333");
 
-
-
         const tooltip = d3.select("#chartContainer").append("div")
             .attr("class", "tooltip")
             .style("position", "absolute")
@@ -286,12 +297,17 @@
             .style("border", "1px solid #ccc")
             .style("border-radius", "5px");
 
-        svg.selectAll(".bar-group")
+        const transition = svg.transition().duration(1000);
+
+        
+        const barGroups = svg.selectAll(".bar-group")
             .data(stackedData)
             .enter().append("g")
             .attr("class", "bar-group")
             .attr("fill", d => color(d.key))
-            .selectAll("rect")
+            
+            
+        const bars = barGroups.selectAll("rect")
             .data(d => d)
             .enter().append("rect")
             .attr("x", d => x(d.data.Tipo_de_Veiculo))
@@ -410,8 +426,14 @@
                 .attr('y', 100)
                 .attr('dy', '.35em')
                 .style('text-anchor', 'end')
-                .text(d => d.data.key);
-    })};
+                .text(d => d.data.key)
+                .on("click", function (event, d) {
+                        const selectedVeiculo = d.data.key;
+                        console.log(selectedVeiculo);
+                        draw_stacked_bar_chart(selectedYear, selectedVeiculo);
+                    });
+        })
+    }
         
 
         function draw_acidents_via(data) {
