@@ -163,14 +163,7 @@
             .range([h - margin, margin])
             .domain([0, y_extent[1]]);
             
-            let circles_Total = svg.selectAll("circle")
-            .data(data)
-            .join("circle")
-            .attr("cx", d => x_scale(d.Ano))
-            .attr("cy", d => y_scale(d.Total))
-            .attr("r",  4)
-            .attr("class","Total")
-
+          
             let x_axis=d3.axisBottom(x_scale);
             let y_axis=d3.axisLeft(y_scale);
             
@@ -212,6 +205,66 @@
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
                 .text("Número de Acidentes");
+
+            let circles_Total = svg.selectAll("circle")
+                .data(data)
+                .join("circle")
+                .attr("cx", d => x_scale(d.Ano))
+                .attr("cy", d => y_scale(d.Total))
+                .attr("r",  4)
+                .attr("class","Total")
+                .attr("mouseover",function(d){
+                    //makes the cirlce larger when mouse is over it
+                    d3.select(this).transition()
+                        .duration('50')
+                        .attr('opacity', '.85')
+                        .attr("r", 8);
+                })
+                .attr("mouseout",function(d){
+                    //retunrs cicle to original size when mouse is no longer over it
+                    d3.select(this).transition()
+                        .duration("50")
+                        .attr("opacity", "1")
+                        
+                })
+            
+            const tooltip=d3.select("#chartContainer3").append("div")
+                .attr("class", "tooltip")
+                .style("position", "absolute")
+                .style("opacity", 0)
+                .style("pointer-events", "none")
+                .style("background-color", "white")
+                .style("padding", "10px")
+                .style("border", "1px solid #ccc")
+                .style("border-radius", "5px");
+            circles_Total.on("mouseover", function(event, d) {
+                // Show tooltip on hover
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+            
+                // Populate tooltip with data
+                tooltip.html(`Year: ${d.Ano}<br>Accidents: ${d.Total}`)
+                    .style("left", (event.pageX) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            
+                // Change circle style on hover
+                d3.select(this)
+                    .attr("r", 8);
+            })
+            .on("mouseout", function(d) {
+                // Hide tooltip on mouseout
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            
+                // Reset circle style on mouseout
+                d3.select(this)
+                    .attr("r", 4);
+                });
+
+
+
         }
     </script>
 

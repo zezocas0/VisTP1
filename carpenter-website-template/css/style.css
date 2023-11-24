@@ -319,15 +319,15 @@
 
     --Outras_color:rgb(20, 220, 210);/* para as outras*/
 
-    --Vligeiros_color: royalblue; /* para os valores totais */
+    --Vligeiros_color: lightgreen; /* para os valores totais */
 
-    --Vpesados_color:lightgreen;  /* para os arruamentos*/
+    --Vpesados_color:rgb(0,57,114);  /* para os arruamentos*/
     
-    --velocipedes_color:lightslategrey;       /* para as autoestradas*/
+    --velocipedes_color:darkorange;       /* para as autoestradas*/
 
-    --ciclomotores_color:darkorange;       /* para as estradas municipais*/
+    --ciclomotores_color:orangered;       /* para as estradas municipais*/
         
-    --motrociclos_color:orangered; /* para as estradas nacionais*/
+    --motrociclos_color:mediumvioletred; /* para as estradas nacionais*/
 }
         
 /* para os arruamentos*/
