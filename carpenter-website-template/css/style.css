@@ -290,12 +290,23 @@
 /*** Acidentes por Regioes em portugal ***/
 
 #chartContainer4{
-    margin-top: 40px;
-    margin-left: -500px;
+    margin-top: -130px;
+    margin-left: -560px;
     overflow: auto;    
 }
 
+.map-container {
+    position: relative;
+    display: flex;
+    z-index: 1;
+}
 
+#chartContainerNovo {
+    margin-top: 15%;
+    margin-left: 54%; /* Ajuste conforme necessário */
+    overflow: auto;
+    position: absolute; /* Usar position absolute para evitar interferências */
+}
 
 
 
@@ -500,6 +511,7 @@ circle.Outras_vias {
 .chart-container {
     position: relative;
 }
+
 
 #chartContainer {
     margin-top: 200px; /* Ajuste a margem superior conforme necessário */

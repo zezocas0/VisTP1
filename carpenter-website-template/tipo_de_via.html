@@ -219,7 +219,7 @@
             const height = 600;
             const marginLeft = 80;
             const marginRight = 10;
-            const marginBottom = 40;
+            const marginBottom = 60;
             
             const data = await d3.csv("data/ansr_dados_tipo-de-via.csv", d3.autoType);
             let filteredData;
@@ -304,6 +304,28 @@
                 .attr("font-size", 13)
                 .attr("font-weight", "bold") // Ajuste a espessura da fonte (negrito)
                 .attr("fill", "black"); // Ajuste a cor do texto conforme necessário
+
+        // Legenda para o tipo de vias
+        svg.append("text")
+            .attr("transform", `translate(${width / 2}, ${height-2})`)
+            .style("text-anchor", "middle")
+            .text("Tipo de vias")
+            .style("font-size", "16px")
+            .style("font-weight", "bold")
+            .style("fill", "#333");
+
+        // Legenda para o numero de acidentes
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0)
+            .attr("x", 0 - height / 2)
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Número de acidentes")
+            .style("font-size", "16px")
+            .style("font-weight", "bold")
+            .style("fill", "#333");
+
 
             const tooltip = d3.select("#chartContainer").append("div")
                 .attr("class", "tooltip")
