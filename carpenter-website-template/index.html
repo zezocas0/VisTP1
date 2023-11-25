@@ -73,9 +73,10 @@
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg-8 text-center">
-                                <h5 class="text-white text-uppercase mb-3 animated slideInDown">Bem-vindo a acidentes de Portugal</h5>
-                                <h1 class="display-3 text-white animated slideInDown mb-4">Visualização de dados sobre acidentes ocorridos em Portugal</h1>
-                                <a href="" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Ler mais</a>
+                                <h5 class="text-white text-uppercase mb-3 animated slideInDown">Welcome To Acidentes em Portugal</h5>
+                                <h1 class="display-3 text-white animated slideInDown mb-4">Site para visualização de dados sobre acidentes ocorridos em Portugal</h1>
+                                <p class="fs-5 fw-medium text-white mb-4 pb-2">um ipsum et diam justo clita et kasd rebum sea elitr.</p>
+                                <a href="" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Read More</a>
                             </div>
                         </div>
                     </div>
@@ -87,9 +88,11 @@
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg-8 text-center">
-                                <h5 class="text-white text-uppercase mb-3 animated slideInDown">Bem-vindo a acidentes de Portugal</h5>
-                                <h1 class="display-3 text-white animated slideInDown mb-4">Visualização de dados sobre acidentes ocorridos em Portugal</h1>
-                                <a href="" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Ler mais</a>
+                                <h5 class="text-white text-uppercase mb-3 animated slideInDown">Welcome To WooDY</h5>
+                                <h1 class="display-3 text-white animated slideInDown mb-4">Best Carpenter & Craftsman Services</h1>
+                                <p class="fs-5 fw-medium text-white mb-4 pb-2">Vero elitr justo clita lorem. Ipsum dolor at sed stet sit diam no. Kasd rebum ipsum et diam justo clita et kasd rebum sea elitr.</p>
+                                <a href="" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Read More</a>
+                                <a href="" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Free Quote</a>
                             </div>
                         </div>
                     </div>
@@ -214,21 +217,42 @@
             // Append a group for the map data
             let map = svg.append("g").attr("class", "map")
                 .attr("transform", "translate(" + margin + "," + margin + ")"); // Apply translation here
-        
+
+
+            // Modify the path creation code to include individual click event listeners
             map.selectAll("path")
                 .data(geo_data.features)
                 .enter()
                 .append("path")
                 .attr("d", path)
+                .attr("name", d => d.properties.name)  // Add the 'name' attribute
                 .style("fill", d => {
-                    // Use the same color scale as in drawData
                     let value = Math.random() * 10000; // Replace with your actual value
                     return colorScale(value);
                 })
-                .style("stroke", "black");
-  
-            
-            
+                .style("stroke", "black")
+                .on("click", function(event,d) {
+                    const containerRect = document.getElementById("chartContainer4").getBoundingClientRect();
+                    const xPosition = event.pageX - containerRect.left -510;  // Adicione um pequeno deslocamento para a direita
+                    const yPosition = event.pageY - containerRect.top - 550;  // Subtrai um pequeno deslocamento para cima
+
+
+                    let regionName = d.properties.name;
+                    console.log("Clicked on:", regionName);
+                    let regionData = csvData.filter(d => d.name === regionName);
+                    let total = regionData[0].Total;
+
+                    console.log(total);
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    tooltip.html(regionName + "<br/> " + total)
+                        .style("left",xPosition + "px")
+                        .style("top", yPosition + "px");
+
+                    
+                })
+              
            
             const tooltip = d3.select("#chartContainer4").append("div")
                 .attr("class", "tooltip")
@@ -239,35 +263,6 @@
                 .style("padding", "10px")
                 .style("border", "1px solid #ccc")
                 .style("border-radius", "5px");
-
-            map.selectAll("path")
-                .data(geo_data.features)
-                .enter()
-                .append("path")
-                .attr("d", path)
-                .style("fill", d => {
-                    let regionName = d.properties.name;
-                    let regionData = csvData.find(item => item.name === regionName && item.ano === selectedYear);
-                    return regionData ? colorScale(regionData.Total) : "gray";
-                })
-                .style("stroke", "black")
-                .on("mouseover", function (event, d) {
-                    let regionName = d.properties.name;
-                    let regionData = csvData.find(item => item.name === regionName && item.ano === selectedYear);
-        
-                    tooltip.transition()
-                        .duration(200)
-                        .style("opacity", 0.9);
-        
-                    tooltip.html(regionName + "<br/>Total: " + (regionData ? regionData.Total : "N/A"))
-                        .style("left", (event.pageX + 5) + "px")
-                        .style("top", (event.pageY - 28) + "px");
-                })
-                .on("mouseout", function () {
-                    tooltip.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-                });
 
 
             //legend
@@ -338,13 +333,12 @@
                     let regionName = d.properties.name;
                     let regionData = dataMap.get(regionName);
                     if (regionData) {
+  
                         return colorScale(regionData.Total);
                     } else {
                         return "gray"; // or any default color for regions without CSV data for the selected year
                     }
                 });
-                // add label to the map with the colorscale legend, given the color and values used
-                
             }
              
         //color scale for the map
