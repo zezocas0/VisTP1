@@ -183,7 +183,10 @@
                         document.querySelectorAll('input[name="year"]').forEach((radio) => {
                             radio.addEventListener('change', function () {
                                 selectedYear = this.value;
+                                d3.select("#chartContainer4").selectAll("svg").remove();
+                                drawMap(geoData,csvData,selectedYear);
                                 drawData(geoData, csvData, selectedYear);
+
                             });
                         });
 
@@ -198,7 +201,8 @@
             let margin = 75,
                 width = 1400 - margin,
                 height = 2000 - margin;
-        
+            
+
             let svg = d3.select("#chartContainer4").append("svg")
                 .attr("width", width + margin)
                 .attr("height", height + margin)
@@ -285,8 +289,12 @@
             .attr("y1", "0%")
             .attr("y2", "0%");
             
-            let minTotal = d3.min(csvData, d => (d.ano === selectedYear) ? +d.Total : Infinity);
-            let maxTotal = d3.max(csvData, d => (d.ano === selectedYear) ? +d.Total : -Infinity);
+            let filteredData = csvData.filter(d => d.ano === selectedYear);
+            let minTotal = d3.min(filteredData, d => +d.Total);
+            let maxTotal = d3.max(filteredData, d => +d.Total);
+        
+
+
             // Calculate the color stops based on the number of unique names in the CSV
             let colorStops = d3.range(0, 1.25, 1 / (colorScale.domain().length - 1));
 
