@@ -1,6 +1,6 @@
 /********** Template CSS **********/
 :root {
-    --primary: #AB7442;
+    --primary: #1b6a03;
     --light: #F5F5F5;
     --dark: #353535;
 }
@@ -580,9 +580,8 @@ circle.Total {
     text-align: center;
     margin-top: 1.5rem;
     font-size: 2em;
-    color: rgb(108, 180, 86); 
+    color: rgb(27, 106, 3); 
 }
-
 
 
 

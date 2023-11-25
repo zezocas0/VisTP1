@@ -238,6 +238,10 @@
                 .style("border", "1px solid #ccc")
                 .style("border-radius", "5px");
             circles_Total.on("mouseover", function(event, d) {
+                const containerRect = document.getElementById("chartContainer3").getBoundingClientRect();
+                const xPosition = event.pageX - containerRect.left + 50;  // Adicione um pequeno deslocamento para a direita
+                const yPosition = event.pageY - containerRect.top - 20;  // Subtrai um pequeno deslocamento para cima
+
                 // Show tooltip on hover
                 tooltip.transition()
                     .duration(200)
@@ -245,8 +249,8 @@
             
                 // Populate tooltip with data
                 tooltip.html(`Year: ${d.Ano}<br>Accidents: ${d.Total}`)
-                    .style("left", (event.pageX) + "px")
-                    .style("top", (event.pageY - 28) + "px");
+                    .style("left", xPosition + "px")
+                    .style("top", yPosition + "px");
             
                 // Change circle style on hover
                 d3.select(this)
