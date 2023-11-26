@@ -184,6 +184,7 @@
                             radio.addEventListener('change', function () {
                                 selectedYear = this.value;
                                 d3.select("#chartContainer4").selectAll("svg").remove();
+                                d3.select("#chartContainerNovo").selectAll("svg").remove();
                                 drawMap(geoData,csvData,selectedYear);
                                 drawData(geoData, csvData, selectedYear);
 
