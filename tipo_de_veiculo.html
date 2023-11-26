@@ -346,8 +346,8 @@
                 const containerRect = document.getElementById("chartContainer").getBoundingClientRect();
 
                 // Calcula a posição do tooltip com base nas coordenadas ao conteiner do gráfico
-                const xPosition = event.pageX - containerRect.left + 200; 
-                const yPosition = event.pageY - containerRect.top - 20;  
+                const xPosition = event.pageX - containerRect.left ;
+                const yPosition = event.pageY - containerRect.top;
 
                 // Nome da categoria da barra
                 const veiculoName = d3.select(event.currentTarget.parentNode).datum().key;
@@ -556,7 +556,7 @@
 
                         const containerRect = document.getElementById("chartContainer2").getBoundingClientRect();
                         const xPosition = event.pageX - containerRect.left; 
-                        const yPosition = event.pageY - containerRect.top-10;
+                        const yPosition = event.pageY - containerRect.top+350;
 
                         tooltip.transition()
                             .duration(200)
