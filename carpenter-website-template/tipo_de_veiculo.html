@@ -34,7 +34,7 @@
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0">
         <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <img src="img/logo4.png" alt="Logotipo" width="225" height="75.5">
+            <img src="img/Logo1.png" alt="Logotipo" width="120" height="75">
         </a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
@@ -49,15 +49,12 @@
     </nav>
 
     <div class="container-fluid bg-light overflow-hidden px-lg-0" style="min-height: 1500px;">
-        <h1 class="color text-center mb-0 fs-0" style="padding-top: 40px; padding-bottom: 35px;">Acidentes por tipo de veículo</h1>
-        <div class="circular-border text-start p-3">
-            <h5 class="text-center smaller-text" style="line-height: 1.5;">Visualização do número de acidentes por tipo de veículo em Portugal.</h5>
-            <h5 class="text-center smaller-text" style="line-height: 1.5;">Pode selecionar o ano desejado para visualizar. Pode também passar o rato sobre as barras para obter detalhes. <p>Além disso, pode clicar nas legendas do PieChart para filtrar os dados por tipo de acidentes.</p></h5>
-        </div>
-        <div class="container Tipo_de_veiculo px-lg-0">
+        <div class="container Tipo_de_via px-lg-0">
             <div class="chart-container">
                 <div id="yearFilter"></div>
-                <div id="chartContainer"></div>
+                <div id="chartContainer">
+                    <h4 class="text-dark mb-4 fs-4" style="position: absolute; top: -170px; left: 50%; transform: translateX(-50%);">Acidentes por tipo de veículo</h4>
+                </div>
                 <div id="chartContainer2">
                     <div id="legendContainer2">
                         <div class="legend-item">
@@ -257,10 +254,11 @@
             .paddingInner(0.1);
 
 
-        const categories = ["Atropelamento", "Colisao", "Despiste"];
+        const categories = ["Atropelamento","Despiste", "Colisao" ];
         const color = d3.scaleOrdinal()
             .domain(categories)
             .range(d3.schemeCategory10);
+            
 
         const svg = d3.select("#chartContainer").append("svg")
             .attr("width", width)
@@ -349,12 +347,8 @@
                 const containerRect = document.getElementById("chartContainer").getBoundingClientRect();
 
                 // Calcula a posição do tooltip com base nas coordenadas relativas ao contêiner do gráfico
-                //const xPosition = event.pageX - containerRect.left + 200;  // Adicione um pequeno deslocamento para a direita
-                //const yPosition = event.pageY - containerRect.top - 20;  // Subtrai um pequeno deslocamento para cima
-
-                const xPosition = event.clientX - containerRect.left - 230;  // Adiciona deslocamento para a direita
-                const yPosition = event.clientY + window.scrollY - containerRect.top - 600;
-
+                const xPosition = event.pageX - containerRect.left + 200;  // Adicione um pequeno deslocamento para a direita
+                const yPosition = event.pageY - containerRect.top - 20;  // Subtrai um pequeno deslocamento para cima
 
                 // Obtém o nome da categoria da barra
                 const veiculoName = d3.select(event.currentTarget.parentNode).datum().key;
@@ -367,8 +361,8 @@
                     .style("opacity", 0.9);
 
                 tooltip.html(`${d.data.Tipo_de_Veiculo}<br>${veiculoName}: ${veiculoValue}`)
-                    .style("left", xPosition + containerRect.left + "px") 
-                    .style("top", yPosition + containerRect.top + "px");
+                    .style("left", xPosition + "px")
+                    .style("top", yPosition + "px");
                 })
             .on("mouseout", () => {
                 tooltip.transition()
@@ -417,9 +411,11 @@
                 key: entry.key,
                 value: entry.value,
             }));
+            const categories = ["Atropelamento","Despiste", "Colisao" ];
+            const color = d3.scaleOrdinal()
+                .domain(categories)
+                .range(d3.schemeCategory10);
         
-            const color = d3.scaleOrdinal(d3.schemeCategory10);
-
             const pie = d3.pie().value(d => d.value);
             const data_ready = pie(pieData);
         
