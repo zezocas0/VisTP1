@@ -220,36 +220,34 @@
             const marginLeft = 80;
             const marginRight = 10;
             const marginBottom = 60;
+            const marginTop=30;
             
             const data = await d3.csv("data/ansr_dados_tipo-de-via.csv", d3.autoType);
             let filteredData;
             let y;
 
-            if(selectedCategory != null){
+            if (selectedCategory != null) {
                 console.log("Selected Year:", selectedYear);
                 console.log("Selected Category:", selectedCategory);
 
                 filteredData = data
-                .filter(d => d.ano == selectedYear)
-                .map(d => ({ Tipo_de_via: d.Tipo_de_via, [selectedCategory]: d[selectedCategory] }));
+                    .filter(d => d.ano == selectedYear)
+                    .map(d => ({ Tipo_de_via: d.Tipo_de_via, [selectedCategory]: d[selectedCategory] }));
 
                 console.log("Filtered Data:", filteredData);
                 y = d3.scaleLinear()
                     .domain([0, d3.max(filteredData, d => d[selectedCategory])])
-                    .range([height - marginBottom, 0]);
-            }
-            else{
+                    .range([height - marginBottom, marginTop]); 
+            } else {
                 filteredData = data.filter(d => d.ano == selectedYear);
-                    y = d3.scaleLinear()
+                y = d3.scaleLinear()
                     .domain([0, d3.max(filteredData, d => d3.max([d.VM, d.FG, d.FL]))])
-                    .range([height - marginBottom, 0]);
+                    .range([height - marginBottom, marginTop]); 
             }
             const x = d3.scaleBand()
                 .domain(filteredData.map(d => d.Tipo_de_via))
                 .rangeRound([marginLeft, width - marginRight])
                 .paddingInner(0.1);
-        
-                            
             // add the x and y lines to the svg
             const xAxis = d3.axisBottom(x);
             const yAxis = d3.axisLeft(y).ticks(5);
@@ -269,8 +267,8 @@
                 .offset(d3.stackOffsetNone)(filteredData);
         
             svg.append("text")
-                .attr("x", (width / 2))  // Use width instead of w
-                .attr("y", (marginBottom / 2))  // Use marginBottom instead of margin
+                .attr("x", (width / 2))
+                .attr("y", marginTop-5)  // Use marginBottom instead of margin
                 .attr("text-anchor", "middle")
                 .text("Tipo de acidente no ano " + selectedYear);
                 
