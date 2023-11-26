@@ -102,13 +102,12 @@
         const yearFilter = document.getElementById("yearFilter");
         const years = [2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020];
         
-        // Create a container div with a specific height
-        yearFilter.style.overflow = "auto"; // Add overflow property
+        yearFilter.style.overflow = "auto";
 
         for (const year of years) {
             const radio = document.createElement("input");
             radio.type = "radio";
-            radio.name = "year"; // Set the same name for all radio buttons in the group
+            radio.name = "year";
             radio.value = year;
         
             const label = document.createElement("label");
@@ -157,7 +156,7 @@
             const height = 600;
             const marginLeft = 40;
             const marginRight = 10;
-            const marginBottom = 40; // Aumente a margem inferior para acomodar os rótulos do eixo y
+            const marginBottom = 40;
 
             const data = await d3.csv("data/ansr_dados_tipo-de-via.csv", d3.autoType);
             const data2007 = data.filter(d => d.ano === 2007);
@@ -196,7 +195,7 @@
                     .attr("class", "bar bar-" + categoria)
                     .attr("x", d => x(d.tipoDeVia) + x.bandwidth() / categories.length * i)
                     .attr("y", d => y(d.value))
-                    .attr("width", x.bandwidth() / categories.length) // Ajusta a largura
+                    .attr("width", x.bandwidth() / categories.length)
                     .attr("height", d => height - marginBottom - y(d.value))
                     .attr("fill", color(categoria));
                 });
@@ -272,7 +271,7 @@
         
             svg.append("text")
                 .attr("x", (width / 2))
-                .attr("y", marginTop-5)  // Use marginBottom instead of margin
+                .attr("y", marginTop-5)
                 .attr("text-anchor", "middle")
                 .text("Tipo de acidente no ano " + selectedYear);
                 
@@ -295,8 +294,8 @@
                 .call(g => g.selectAll(".domain").remove())
                 .selectAll("text")
                 .attr("font-size", 16)
-                .attr("font-weight", "bold") // Ajuste a espessura da fonte (negrito)
-                .attr("fill", "black"); // Ajuste a cor do texto conforme necessário
+                .attr("font-weight", "bold")
+                .attr("fill", "black");
         
             svg.append("g")
                 .attr("transform", `translate(${marginLeft},0)`)
@@ -304,8 +303,8 @@
                 .call(g => g.selectAll(".domain").remove())
                 .selectAll("text")
                 .attr("font-size", 13)
-                .attr("font-weight", "bold") // Ajuste a espessura da fonte (negrito)
-                .attr("fill", "black"); // Ajuste a cor do texto conforme necessário
+                .attr("font-weight", "bold") 
+                .attr("fill", "black");
 
         // Legenda para o tipo de vias
         svg.append("text")
@@ -351,22 +350,22 @@
                     .attr("y", d => y(d[1]))
                     .attr("height", d => y(d[0]) - y(d[1]))
                     .attr("width", x.bandwidth())
-                    .attr("class", d => `bar ${d.key}`)  // Adicione a classe da barra para refletir a categoria
+                    .attr("class", d => `bar ${d.key}`)
                     .on("mouseover", (event, d) => {
-                        // Obtém as coordenadas absolutas do contêiner do gráfico
+                        // Obtém as coordenadas do conteiner do gráfico
                         const containerRect = document.getElementById("chartContainer").getBoundingClientRect();
         
 
-                        // Calcula a posição do tooltip com base nas coordenadas relativas ao contêiner do gráfico
-                        //const xPosition = event.pageX - containerRect.left + 200;  // Adicione um pequeno deslocamento para a direita
-                        //const yPosition = event.pageY - containerRect.top - 20;  // Subtrai um pequeno deslocamento para cima
-                        const xPosition = event.clientX - containerRect.left - 230;  // Adiciona deslocamento para a direita
+                        // Calcula a posição do tooltip com base nas coordenadas ao conteiner do gráfico
+                        //const xPosition = event.pageX - containerRect.left + 200;
+                        //const yPosition = event.pageY - containerRect.top - 20;
+                        const xPosition = event.clientX - containerRect.left - 230;
                         const yPosition = event.clientY + window.scrollY - containerRect.top - 600;
-                        // Obtém o nome da categoria da barra
+                        // Nome da categoria da barra
                         const categoryName = d3.select(event.currentTarget.parentNode).datum().key;
 
-                        // Obtém o valor específico da categoria
-                        const categoryValue = d.data[categoryName]; // Use o nome da categoria para acessar o valor correspondente
+                        // Valor específico da categoria
+                        const categoryValue = d.data[categoryName];
 
                         tooltip.transition()
                             .duration(200)
@@ -403,9 +402,6 @@
             // Load data asynchronously using d3.json
             d3.json("data/ansr_dados-via-piechart.json").then(function (data) {
             
-                // Replace selectedYear with the desired year or handle it dynamically
-                // Get the width and height of the #pie-chart container
-
                 // Append SVG to #pie-chart and apply translation
                 const svg = d3.select('body').append('svg')
                     .attr('class', 'pie-chart')
@@ -511,7 +507,7 @@
                 .range([  margin ,w- margin])
                 .domain(x_extent);
             /*    
-            let y_max_extent = d3.max(data, d => d.Total); // Usando o valor total como domínio do eixo y
+            let y_max_extent = d3.max(data, d => d.Total);
             let y_scale = d3.scaleLinear()
                 .range([h - margin, margin])
                 .domain([0, y_max_extent]);
@@ -539,9 +535,9 @@
                 .attr("y",  (margin / 2))
                 .attr("text-anchor", "middle")  
                 .text("Acidentes por tipo de via ")
-                .style("font-size", "18px") // Ajusta o tamanho da fonte
-                .style("font-weight", "bold") // Deixa o texto em negrito
-                .style("fill", "#333"); // Cor mais escura
+                .style("font-size", "18px") 
+                .style("font-weight", "bold") 
+                .style("fill", "#333");
             
 
             svg.selectAll(".axis").style("stroke-width", "3px");
@@ -552,8 +548,8 @@
                 .attr("transform", "translate(" + (w / 2) + " ," + (h - 20) + ")")
                 .style("text-anchor", "middle")
                 .text("Anos")  
-                .style("font-size", "16px") // Ajusta o tamanho da fonte
-                .style("font-weight", "bold") // Deixa o texto em negrito
+                .style("font-size", "16px") 
+                .style("font-weight", "bold")
                 .style("fill", "#333");
 
             // legenda no eixo Y
@@ -564,8 +560,8 @@
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
                 .text("Número de Acidentes")
-                .style("font-size", "16px") // Ajusta o tamanho da fonte
-                .style("font-weight", "bold") // Deixa o texto em negrito
+                .style("font-size", "16px") 
+                .style("font-weight", "bold")
                 .style("fill", "#333");
         
 
@@ -594,8 +590,8 @@
                     .on("mouseover", (event, d) => {
 
                         const containerRect = document.getElementById("chartContainer2").getBoundingClientRect();
-                        const xPosition = event.pageX - containerRect.left;  // Adicione um pequeno deslocamento para a direita
-                        const yPosition = event.pageY - containerRect.top-10;  // Subtrai um pequeno deslocamento para cima
+                        const xPosition = event.pageX - containerRect.left;
+                        const yPosition = event.pageY - containerRect.top-10;
 
                         tooltip.transition()
                             .duration(200)

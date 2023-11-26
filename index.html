@@ -100,17 +100,17 @@
     <!-- Carousel End -->
 
     <div class="container-fluid bg-light overflow-hidden px-lg-0" style="min-height: 2500px;">
-        <div class="container regioes px-lg-0">
-            <h1 class="color">Acidentes por regiões de Portugal</h1>
-            <h5 class="text-darker mb-4 text-center mt-4 smaller-text"> É possível observar uma visualização com o número de acidentes por regiões em Portugal.</h5>
-            <h5 class="text-darker mb-4 text-center mt-4 smaller-text"> Pode filtrar pelo ano, passar o rato sobre a região para ver o valor total de acidentes do ano escolhido e clicar na região para uma visualização detalhada.
-            </h5></h5>
-            <div class="map-container">
-                <div id="yearFilter"></div>
-                <div id="chartContainer4"></div>
-                <div id="chartContainerNovo"></div>
-            </div>  
+        <h1 class="color" style="padding-top: 30px; padding-bottom: 10px;">Acidentes por regiões de Portugal</h1>
+        <div class="circular-border text-start" style="margin-bottom: 50px;">
+            <h5 class="text-darker mb-1 text-center mt-3 smaller-text"> É possível observar uma visualização com o número de acidentes por regiões em Portugal.</h5>
+            <h5 class="text-darker mb-2 text-center mt-0 smaller-text"> Pode filtrar pelo ano, passar o rato sobre a região para ver o valor total de acidentes do ano escolhido e clicar na região para uma visualização detalhada.</h5>
         </div>
+        <div class="container regioes px-lg-0">
+        <div class="map-container">
+            <div id="yearFilter"></div>
+            <div id="chartContainer4"></div>
+            <div id="chartContainerNovo"></div>
+        </div>  
     </div>
 
 
@@ -240,7 +240,7 @@
                 .enter()
                 .append("path")
                 .attr("d", path)
-                .attr("name", d => d.properties.name)  // Add the 'name' attribute
+                .attr("name", d => d.properties.name)  // Add the name attribute
                 .style("fill", d => {
                     let value = Math.random() * 10000;
                     return colorScale(value);

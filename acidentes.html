@@ -139,7 +139,7 @@
         }
         
         function draw_acidentes_total_via(data) {
-            let w = 1000, h = 550; // width and height
+            let w = 1000, h = 550;
             margin = 80;
             
             let svg = d3.select("#chartContainer3").append('svg')
@@ -147,7 +147,6 @@
             .attr('height', h);
             
             
-            // The scale does not have extent, as it need all the values
             let x_extent = data.map(d => d.Ano);
             let x_scale = d3.scalePoint()
                 .range([  margin ,w- margin])
@@ -234,8 +233,8 @@
                 .style("border-radius", "5px");
             circles_Total.on("mouseover", function(event, d) {
                 const containerRect = document.getElementById("chartContainer3").getBoundingClientRect();
-                const xPosition = event.pageX - containerRect.left + 50;  // Adicione um pequeno deslocamento para a direita
-                const yPosition = event.pageY - containerRect.top - 20;  // Subtrai um pequeno deslocamento para cima
+                const xPosition = event.pageX - containerRect.left + 50;
+                const yPosition = event.pageY - containerRect.top - 20; 
 
                 // Show tooltip on hover
                 tooltip.transition()
@@ -247,7 +246,6 @@
                     .style("left", xPosition + "px")
                     .style("top", yPosition + "px");
             
-                // Change circle style on hover
                 d3.select(this)
                     .attr("r", 8);
             })
