@@ -41,7 +41,7 @@
      <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0">
         <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <img src="img/Logo1.png" alt="Logotipo" width="120" height="75">
+            <img src="img/logo4.png" alt="Logotipo" width="225" height="75.5">
         </a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
@@ -55,29 +55,32 @@
         </div>
     </nav>
     <!-- Navbar End -->
-    <div class="container-fluid bg-light overflow-hidden px-lg-0" style="min-height: 2500px;">
+    <div class="container-fluid bg-light overflow-hidden px-lg-0" style="min-height: 1200px;">
         <div class="container acidentes_portugal px-lg-0">
-            <h1 class="color">Acidentes em Portugal</h1>
-            <h5 class="text-darker mb-4 text-center mt-4 smaller-text"> Nesta página é possível observar uma visualização com o número total de acidentes ao longo dos anos.</h5>
+            <h1 class="color"  style="padding-top: -15px; padding-bottom: 10px;">Acidentes em Portugal</h1>
+            <div class="circular-border text-start p-4">
+                <h5 class="text-darker text- smaller-text"> É possível observar uma visualização com o número total de acidentes ao longo dos anos.</h5>
+                <h5 class="text-darker text-center smaller-text"> Pode também filtrar por tipo de via e tipo de veículo.</h5>
+            </div>
             <div class="chart-container">
                 <div id="chartContainer3"></div>
-                <div style="position: absolute; top: 120px; right: -5px;">
-                    <button type="button" onclick="redirectPage('tipo_de_via.html')" class="btn btn-primary py-2 mt-2 d-block" style="width: 140px; height: 40px; margin-bottom: 15px;">Tipo de via</button>
+                <div style="position: absolute; top: 120px; right:-15px; border: 5px solid #ccc; padding: 25px; border-radius: 12px;">
+                    <h5>Filtrar por:</h5>
+                    <button type="button" onclick="redirectPage('tipo_de_via.html')" class="btn btn-primary py-2 mt-2 d-block" style="width: 160px; height: 40px; margin-bottom: 15px;">Tipo de via</button>
                     <button type="button" onclick="redirectPage('tipo_de_veiculo.html')" class="btn btn-primary py-2 mt-2 d-block" style="width: 160px; height: 40px; margin-bottom: 15px ;">Tipo de veículo</button>
                 </div>    
             </div>
         </div>
     </div>
 
-    <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-light footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+       <!-- Footer Start -->
+       <div class="container-fluid bg-dark text-light footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Address</h4>
-                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
-                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                    <h4 class="text-light mb-4">Autores</h4>
+                    <p class="mb-2"><i class="fas fa-user-circle me-2"></i>Ricardo Antunes</p>
+                    <p class="mb-2"><i class="fas fa-user-circle me-2"></i>José Santos</p>
                     <div class="d-flex pt-2">
                         <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
                         <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
@@ -86,27 +89,19 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Services</h4>
-                    <a class="btn btn-link" href="">General Carpentry</a>
-                    <a class="btn btn-link" href="">Furniture Remodeling</a>
-                    <a class="btn btn-link" href="">Wooden Floor</a>
-                    <a class="btn btn-link" href="">Wooden Furniture</a>
-                    <a class="btn btn-link" href="">Custom Carpentry</a>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Quick Links</h4>
-                    <a class="btn btn-link" href="">About Us</a>
-                    <a class="btn btn-link" href="">Contact Us</a>
-                    <a class="btn btn-link" href="">Our Services</a>
-                    <a class="btn btn-link" href="">Terms & Condition</a>
-                    <a class="btn btn-link" href="">Support</a>
+                    <h4 class="text-light mb-4">Ligações</h4>
+                    <a class="btn btn-link" href="">Sobre nós</a>
+                    <a class="btn btn-link" href="">Contacte-nos</a>
+                    <a class="btn btn-link" href="">Nossos serviços</a>
+                    <a class="btn btn-link" href="">Termos e condições</a>
+                    <a class="btn btn-link" href="">Suporte</a>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Newsletter</h4>
-                    <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
+                    <p>Receba atualizações sobre segurança viária e estatísticas de acidentes em Portugal diretamente no seu email.</p>
                     <div class="position-relative mx-auto" style="max-width: 400px;">
-                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="O seu email">
+                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">Inscrever-se</button>
                     </div>
                 </div>
             </div>
@@ -115,7 +110,7 @@
             <div class="copyright">
                 <div class="row">
                     <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        &copy; <a class="border-bottom" href="#">Your Site Name</a>, All Right Reserved.
+                        &copy; <a class="border-bottom" href="#">Acidentes de Portugal</a>, All Right Reserved.
                     </div>
                     <div class="col-md-6 text-center text-md-end">
                         <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->

@@ -340,6 +340,14 @@
         
     --motrociclos_color:mediumvioletred; /* para as estradas nacionais*/
 }
+
+.circular-border {
+    border-radius: 12px;
+    border: 3px solid #1b6a03; /* Cor e espessura da borda */
+    width: 60%; /* Largura do círculo */
+    margin: 0 auto; /* Centraliza o círculo horizontalmente */
+    padding: 0px; /* Espaçamento interno */
+}
         
 /* para os arruamentos*/
 path.Arruamento{
