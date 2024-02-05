@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <script src="http://d3js.org/d3.v6.js"></script>
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Roboto:wght@500;700;900&display=swap" rel="stylesheet"> 
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+     <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0">
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <img src="img/logo4.png" alt="Logotipo" width="225" height="75.5">
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link active">Home</a>
+                <!-- <a href="about.html" class="nav-item nav-link">About</a> -->
+                <a href="acidentes.html" class="nav-item nav-link">Acidentes em Portugal</a>
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+    <div class="container-fluid bg-light overflow-hidden px-lg-0" style="min-height: 1200px;">
+        <div class="container acidentes_portugal px-lg-0">
+            <h1 class="color"  style="padding-top: -15px; padding-bottom: 10px;">Acidentes em Portugal</h1>
+            <div class="circular-border text-start p-4">
+                <h5 class="text-darker text- smaller-text"> É possível observar uma visualização com o número total de acidentes ao longo dos anos.</h5>
+                <h5 class="text-darker text-center smaller-text"> Pode também filtrar por tipo de via e tipo de veículo.</h5>
+            </div>
+            <div class="chart-container">
+                <div id="chartContainer3"></div>
+                <div style="position: absolute; top: 120px; right:-15px; border: 5px solid #ccc; padding: 25px; border-radius: 12px;">
+                    <h5>Filtrar por:</h5>
+                    <button type="button" onclick="redirectPage('tipo_de_via.html')" class="btn btn-primary py-2 mt-2 d-block" style="width: 160px; height: 40px; margin-bottom: 15px;">Tipo de via</button>
+                    <button type="button" onclick="redirectPage('tipo_de_veiculo.html')" class="btn btn-primary py-2 mt-2 d-block" style="width: 160px; height: 40px; margin-bottom: 15px ;">Tipo de veículo</button>
+                </div>    
+            </div>
+        </div>
+    </div>
+
+       <!-- Footer Start -->
+       <div class="container-fluid bg-dark text-light footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-light mb-4">Autores</h4>
+                    <p class="mb-2"><i class="fas fa-user-circle me-2"></i>Ricardo Antunes</p>
+                    <p class="mb-2"><i class="fas fa-user-circle me-2"></i>José Santos</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-light mb-4">Ligações</h4>
+                    <a class="btn btn-link" href="">Sobre nós</a>
+                    <a class="btn btn-link" href="">Contacte-nos</a>
+                    <a class="btn btn-link" href="">Nossos serviços</a>
+                    <a class="btn btn-link" href="">Termos e condições</a>
+                    <a class="btn btn-link" href="">Suporte</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-light mb-4">Newsletter</h4>
+                    <p>Receba atualizações sobre segurança viária e estatísticas de acidentes em Portugal diretamente no seu email.</p>
+                    <div class="position-relative mx-auto" style="max-width: 400px;">
+                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="O seu email">
+                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">Inscrever-se</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" href="#">Acidentes de Portugal</a>, All Right Reserved.
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                        Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-0 back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+    <script>
+        // Initial data load and visualization
+        d3.csv("data/PORDATA_Acidentes-por-tipo-de-via(total).csv")
+        .then(draw)
+        .catch(function(err) {
+            console.log(err);
+        });
+
+        function draw(data) {
+            draw_acidentes_total_via(data);
+        }
+        
+        function draw_acidentes_total_via(data) {
+            let w = 1000, h = 550;
+            margin = 80;
+            
+            let svg = d3.select("#chartContainer3").append('svg')
+            .attr('width', w)
+            .attr('height', h);
+            
+            
+            let x_extent = data.map(d => d.Ano);
+            let x_scale = d3.scalePoint()
+                .range([  margin ,w- margin])
+                .domain(x_extent);
+                
+            let y_extent = d3.extent(data, d => d.Total);
+            let y_scale = d3.scaleLinear()
+            .range([h - margin, margin])
+            .domain([0, y_extent[1]]);
+            
+          
+            let x_axis=d3.axisBottom(x_scale);
+            let y_axis=d3.axisLeft(y_scale);
+            
+            d3.select("svg")
+                .append("g")
+                .attr("class","x axis")
+                .attr("transform","translate(0," + ( h -margin ) + ")")
+                .call(x_axis);
+
+
+            d3.select("svg")
+                .append("g")
+                .attr("class","y axis")
+                .attr("transform","translate(" + margin + ",0)")
+                .call(y_axis)                   
+            
+            svg.selectAll(".axis").style("stroke-width", "3px");
+            svg.selectAll(".axis text").style("font-size", "14px");
+
+            let line=d3.line()
+                .x((d,i)=>x_scale(d.Ano))
+                .y((d,i)=>y_scale(d.Total))
+                
+            svg.append("path")
+                .attr("d",line(data))
+                .attr("class","Total")
+
+            // Adiciona legenda no eixo X
+            svg.append("text")
+                .attr("transform", "translate(" + (w / 2) + " ," + (h - 20) + ")")
+                .style("text-anchor", "middle")
+                .text("Anos");
+
+             // Adiciona legenda no eixo Y
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y",0)
+                .attr("x", 0 - (h / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text("Número de Acidentes");
+
+            let circles_Total = svg.selectAll("circle")
+                .data(data)
+                .join("circle")
+                .attr("cx", d => x_scale(d.Ano))
+                .attr("cy", d => y_scale(d.Total))
+                .attr("r",  4)
+                .attr("class","Total")
+                .attr("mouseover",function(d){
+                    //makes the cirlce larger when mouse is over it
+                    d3.select(this).transition()
+                        .duration('50')
+                        .attr('opacity', '.85')
+                        .attr("r", 8);
+                })
+                .attr("mouseout",function(d){
+                    //retunrs cicle to original size when mouse is no longer over it
+                    d3.select(this).transition()
+                        .duration("50")
+                        .attr("opacity", "1")
+                        
+                })
+            
+            const tooltip=d3.select("#chartContainer3").append("div")
+                .attr("class", "tooltip")
+                .style("position", "absolute")
+                .style("opacity", 0)
+                .style("pointer-events", "none")
+                .style("background-color", "white")
+                .style("padding", "10px")
+                .style("border", "1px solid #ccc")
+                .style("border-radius", "5px");
+            circles_Total.on("mouseover", function(event, d) {
+                const containerRect = document.getElementById("chartContainer3").getBoundingClientRect();
+                const xPosition = event.pageX - containerRect.left + 50;
+                const yPosition = event.pageY - containerRect.top - 20; 
+
+                // Show tooltip on hover
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+            
+                // Populate tooltip with data
+                tooltip.html(`Year: ${d.Ano}<br>Accidents: ${d.Total}`)
+                    .style("left", xPosition + "px")
+                    .style("top", yPosition + "px");
+            
+                d3.select(this)
+                    .attr("r", 8);
+            })
+            .on("mouseout", function(d) {
+                // Hide tooltip on mouseout
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            
+                // Reset circle style on mouseout
+                d3.select(this)
+                    .attr("r", 4);
+                });
+
+
+
+        }
+    </script>
+
+
+    <script>
+        function redirectPage(page) {
+            window.location.href = page;
+        }
+    </script>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/counterup/counterup.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/isotope/isotope.pkgd.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

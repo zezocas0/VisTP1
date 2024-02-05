@@ -1,0 +1,588 @@
+<!DOCTYPE html >
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+        <script src="http://d3js.org/d3.v6.js"></script>
+
+        <!-- Favicon -->
+        <link href="img/favicon.ico" rel="icon">
+    
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Roboto:wght@500;700;900&display=swap" rel="stylesheet"> 
+    
+        <!-- Icon Font Stylesheet -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+        <!-- Libraries Stylesheet -->
+        <link href="lib/animate/animate.min.css" rel="stylesheet">
+        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+        <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+        <!-- Template Stylesheet -->
+        <link href="css/style.css" rel="stylesheet">
+        <style>
+        </style>
+</head>
+<body>
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0">
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <img src="img/Logo1.png" alt="Logotipo" width="120" height="75">
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link active">Home</a>
+                <!-- <a href="about.html" class="nav-item nav-link">About</a> -->
+                <a href="acidentes.html" class="nav-item nav-link">Acidentes em Portugal</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid bg-light overflow-hidden px-lg-0" style="min-height: 1500px;">
+        <div class="container Tipo_de_via px-lg-0">
+            <div class="chart-container">
+                <div id="yearFilter"></div>
+                <div id="chartContainer">
+                    <h4 class="text-dark mb-4 fs-4" style="position: absolute; top: -170px; left: 50%; transform: translateX(-50%);">Acidentes por tipo de veículo</h4>
+                </div>
+                <div id="chartContainer2">
+                    <div id="legendContainer2">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: var(--Vligeiros_color);"></div>
+                            <div class="legend-text">Veiculo ligeiro</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: var(--Vpesados_color)"></div>
+                            <div class="legend-text">Veiculo pesado</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: var(--velocipedes_color)"></div>
+                            <div class="legend-text">Velocipedes</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color:var(--ciclomotores_color)"></div>
+                            <div class="legend-text">Ciclomotores</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: var(--motrociclos_color)"></div>
+                            <div class="legend-text">motrociclos</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color:var(--Outras_color)"></div>
+                            <div class="legend-text">Outras</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initial data load and visualization
+        d3.csv("data/PORDATA_Acidentes-por-tipo-de-veiculo.csv")
+        .then(draw)
+        .catch(function(err) {
+            console.log(err);
+        });
+
+        const width = 800;
+        const height = 600;
+        const marginLeft = 40;
+        const marginRight = 10;
+        const marginBottom = 40;
+
+        const yearFilter = document.getElementById("yearFilter");
+        const years = [2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020];
+        
+    
+        yearFilter.style.overflow = "auto";
+
+        for (const year of years) {
+            const radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = "year";
+            radio.value = year;
+        
+            const label = document.createElement("label");
+            label.textContent = year;
+            label.appendChild(radio);
+        
+            const radioRow = document.createElement("div");
+            radioRow.classList.add("radio-row");
+            radioRow.appendChild(label);
+        
+            // Append the container to the yearFilter
+            yearFilter.appendChild(radioRow);
+        }
+        
+        
+        function draw(data) {
+
+            const yearFilter = d3.select("#yearFilter");
+
+            yearFilter.on("change", () => {
+                const selectedYear = [];
+                yearFilter.selectAll("input:checked").each(function() {
+                    selectedYear.push(+this.value);
+                });
+            
+                //console.log(selectedYear);
+                if (selectedYear.length > 0) {
+                    draw_stacked_bar_chart(selectedYear);
+                    drawPieChart(selectedYear);
+                } else {
+                    // Handle the case where no checkboxes are selected
+                    console.log("No year selected");
+                }
+            });
+            
+        
+            draw_stacked_bar_chart(2007);
+            draw_acidents_via(data); 
+            drawPieChart([2007]);
+        }
+        
+
+        // Grafico de barras agrupado num respetivo ano
+        async function draw_Acidentes_via_porAno() {
+            const width = 800;
+            const height = 600;
+            const marginLeft = 40;
+            const marginRight = 10;
+            const marginBottom = 40;
+
+            const data = await d3.csv("data/ansr_dados_tipo-de-veiculo.csv", d3.autoType);
+            const data2007 = data.filter(d => d.ano === 2007);
+
+            // Configuração das escalas
+            const x = d3.scaleBand()
+                .domain(data2007.map(d => d.Tipo_de_via))
+                .rangeRound([marginLeft, width - marginRight])
+                .paddingInner(0.1);
+
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(data2007, d => d3.max([d.VM, d.FG, d.FL]))])
+                .range([height - marginBottom, 0]);
+
+            const categories = ["VM", "FG", "FL"];
+            const color = d3.scaleOrdinal()
+            .domain(categories)
+            .range(d3.schemeCategory10);
+            let svg = d3.select("#chartContainer").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+                
+                // Itera sobre as categorias
+                categories.forEach((categoria, i) => {
+                // Seleciona os dados correspondentes à categoria
+                const dataCategoria = data2007.map(d => ({
+                    categoria: categoria,
+                    value: d[categoria],
+                    tipoDeVia: d.Tipo_de_via
+                }));
+                
+                console.log(dataCategoria);
+
+                
+                // Cria as barras para a categoria
+                svg.selectAll(".bar-" + categoria)
+                .data(dataCategoria)
+                .enter().append("rect")
+                    .attr("class", "bar bar-" + categoria)
+                    .attr("x", d => x(d.tipoDeVia) + x.bandwidth() / categories.length * i)
+                    .attr("y", d => y(d.value))
+                    .attr("width", x.bandwidth() / categories.length)
+                    .attr("height", d => height - marginBottom - y(d.value))
+                    .attr("fill", color(categoria));
+                });
+                
+                // Adiciona eixos
+                svg.append("g")
+                .attr("transform", `translate(0,${height - marginBottom})`)
+                .call(d3.axisBottom(x))
+                .call(g => g.selectAll(".domain").remove());
+                
+                svg.append("g")
+                .attr("transform", `translate(${marginLeft},0)`)
+                .call(d3.axisLeft(y).ticks(5))
+                .call(g => g.selectAll(".domain").remove());
+            }
+        
+    // Grafico de barras agrupado num respetivo ano
+    async function draw_stacked_bar_chart(selectedYear, selectedVeiculo) {
+        d3.select("#chartContainer").selectAll("svg").remove();
+
+        const width = 800;
+        const height = 650;
+        const marginLeft = 80;
+        const marginRight = 10;
+        const marginBottom = 60;
+
+        const data = await d3.csv("data/ansr_dados_tipo-de-veiculo.csv", d3.autoType);
+        let filteredData;
+        let y;
+
+        if(selectedVeiculo != null){
+            filteredData = data
+                .filter(d => d.ano == selectedYear)
+                .map(d => ({ Tipo_de_Veiculo: d.Tipo_de_Veiculo, [selectedVeiculo]: d[selectedVeiculo]}));
+            y = d3.scaleLinear()
+                .domain([0, d3.max(filteredData, d => d[selectedVeiculo])])
+                .range([height - marginBottom, 0]);
+        }
+        else{
+            filteredData = data.filter(d => d.ano == selectedYear);
+            y = d3.scaleLinear()
+                .domain([0, d3.max(filteredData, d => d3.max([d.Atropelamento, d.Colisao, d.Despiste]))])
+                .range([height - marginBottom, 0]);
+        }
+    
+        const x = d3.scaleBand()
+            .domain(filteredData.map(d => d.Tipo_de_Veiculo))
+            .range([marginLeft, width - marginRight])
+            .paddingInner(0.1);
+
+
+        const categories = ["Atropelamento","Despiste", "Colisao" ];
+        const color = d3.scaleOrdinal()
+            .domain(categories)
+            .range(d3.schemeCategory10);
+            
+
+        const svg = d3.select("#chartContainer").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        const stackedData = d3.stack()
+            .keys(categories)
+            .order(d3.stackOrderNone)
+            .offset(d3.stackOffsetNone)(filteredData);
+
+        svg.append("text")
+            .attr("x", (width / 2))
+            .attr("y", (marginBottom / 2))
+            .attr("text-anchor", "middle")
+            .text("Acidentes ocorridos por tipo de veículos no ano " + selectedYear);
+
+        svg.append("g")
+            .attr("transform", `translate(0,${height - marginBottom})`)
+            .call(d3.axisBottom(x))
+            .call(g => g.selectAll(".domain").remove())
+            .selectAll("text")
+            .attr("font-size", 16)
+            .attr("font-weight", "bold") 
+            .attr("fill", "black");
+
+        svg.append("g")
+            .attr("transform", `translate(${marginLeft},0)`)
+            .call(d3.axisLeft(y).ticks(5))
+            .call(g => g.selectAll(".domain").remove())
+            .selectAll("text")
+            .attr("font-size", 13)
+            .attr("font-weight", "bold") 
+            .attr("fill", "black");
+        
+        // Legenda para os veiculos
+        svg.append("text")
+            .attr("transform", `translate(${width / 2}, ${height-2})`)
+            .style("text-anchor", "middle")
+            .text("Tipos de veículos")
+            .style("font-size", "16px")
+            .style("font-weight", "bold")
+            .style("fill", "#333");
+
+        // Legenda para o numero de acidentes
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0)
+            .attr("x", 0 - height / 2)
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Número de acidentes")
+            .style("font-size", "16px")
+            .style("font-weight", "bold")
+            .style("fill", "#333");
+
+        const tooltip = d3.select("#chartContainer").append("div")
+            .attr("class", "tooltip")
+            .style("position", "absolute")
+            .style("opacity", 0)
+            .style("pointer-events", "none")
+            .style("background-color", "white")
+            .style("padding", "10px")
+            .style("border", "1px solid #ccc")
+            .style("border-radius", "5px");
+
+        const transition = svg.transition().duration(1000);
+
+        
+        const barGroups = svg.selectAll(".bar-group")
+            .data(stackedData)
+            .enter().append("g")
+            .attr("class", "bar-group")
+            .attr("fill", d => color(d.key))
+            
+            
+        const bars = barGroups.selectAll("rect")
+            .data(d => d)
+            .enter().append("rect")
+            .attr("x", d => x(d.data.Tipo_de_Veiculo))
+            .attr("y", d => y(d[1]))
+            .attr("height", d => y(d[0]) - y(d[1]))
+            .attr("width", x.bandwidth())
+            .attr("class", d => `bar ${d.key}`) 
+            .on("mouseover", (event, d) => {
+                // Obtém as coordenadas do conteiner do gráfico
+                const containerRect = document.getElementById("chartContainer").getBoundingClientRect();
+
+                // Calcula a posição do tooltip com base nas coordenadas ao conteiner do gráfico
+                const xPosition = event.pageX - containerRect.left ;
+                const yPosition = event.pageY - containerRect.top;
+
+                // Nome da categoria da barra
+                const veiculoName = d3.select(event.currentTarget.parentNode).datum().key;
+
+                // Valor específico da categoria
+                const veiculoValue = d.data[veiculoName];
+
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", 0.9);
+
+                tooltip.html(`${d.data.Tipo_de_Veiculo}<br>${veiculoName}: ${veiculoValue}`)
+                    .style("left", xPosition + "px")
+                    .style("top", yPosition + "px");
+                })
+            .on("mouseout", () => {
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+    }
+
+
+    function drawPieChart(selectedYear) {
+        const w = 150;
+        const h = 150;
+        const radius = Math.min(w, h) / 2;
+        
+        const width = 1000;
+        const height = 800;
+        const marginLeft = 40;
+        const marginRight = 10;
+        const marginBottom = 40;
+        
+        //clear svg with class pie-chart to use updated data
+        d3.select(".pie-chart").remove();
+        
+        // Load data asynchronously using d3.json
+        d3.json("data/ansr_dados-veiculo-piechart.json").then(function (data) {
+        
+            const svg = d3.select('body').append('svg')
+                .attr('class', 'pie-chart')
+                .attr('width',w+100)
+                .attr('height', h+100)
+                .append('g')
+                .attr('transform', `translate(${w / 2+10}, ${h / 2})`);
+
+            selectedYear = selectedYear[0];
+
+            const filteredData = data.filter(entry => entry.ano === selectedYear);
+        
+            // Extract the values for the pie chart
+            const pieData = filteredData.map(entry => ({
+                key: entry.key,
+                value: entry.value,
+            }));
+            const categories = ["Atropelamento","Despiste", "Colisao" ];
+            const color = d3.scaleOrdinal()
+                .domain(categories)
+                .range(d3.schemeCategory10);
+        
+            const pie = d3.pie().value(d => d.value);
+            const data_ready = pie(pieData);
+        
+            const arcGenerator = d3.arc()
+                .innerRadius(0)
+                .outerRadius(radius);
+        
+            const arcs = svg.selectAll('whatever')
+                .data(data_ready)
+                .enter()
+                .append('g')
+                .attr('class', 'arc');
+        
+            arcs.append('path')
+                .attr('d', arcGenerator)
+                .style('fill', d => color(d.data.key))
+                .style('stroke', 'black')
+                .style('stroke-width', '2px');
+        
+            // Legend
+            const legend = svg.selectAll('.legend')
+                .data(data_ready)
+                .enter()
+                .append('g')
+                .attr('class', 'legend')
+                .attr('transform', (_, i) => `translate(-50, ${i * 20})`);
+        
+            legend.append('rect')
+                .attr('x', w -40)
+                .attr('y',92)
+                .attr('width', 18)
+                .attr('height', 16)
+                .style('fill', d => color(d.data.key));
+        
+            legend.append('text')
+                .attr('x', w-50)
+                .attr('y', 100)
+                .attr('dy', '.35em')
+                .style('text-anchor', 'end')
+                .text(d => d.data.key)
+                .on("click", function (event, d) {
+                        const selectedVeiculo = d.data.key;
+                        console.log(selectedVeiculo);
+                        draw_stacked_bar_chart(selectedYear, selectedVeiculo);
+                    });
+        })
+    }
+        
+
+        function draw_acidents_via(data) {
+            let w = 1200, h = 550;
+            margin=75;
+
+            let svg = d3.select('#chartContainer2').append('svg')
+            .attr('width', w)
+            .attr('height', h);
+
+            let colors = {
+                Ligeiros: 'lightgreen',
+                Pesados: 'rgb(0, 57, 114)',
+                Velocipedes: 'darkorange',
+                Ciclomotores: 'orangered',
+                Motociclos: 'mediumvioletred',
+                Outras: 'rgb(20, 220, 210)'
+            };
+        
+            let x_extent = data.map(d => d.Ano);
+            let x_scale = d3.scalePoint()
+                .range([  margin ,w- margin])
+                .domain(x_extent);
+                
+            let y_extent = d3.extent(data, d => d.Ligeiros);
+            let y_scale = d3.scaleLinear()
+                .range([h - margin, margin])
+                .domain([0, y_extent[1]]);
+
+            let x_axis=d3.axisBottom(x_scale);
+            let y_axis=d3.axisLeft(y_scale);
+
+            svg.append("g")
+            .attr("class","x axis")
+            .attr("transform","translate(0," + ( h -margin ) + ")")
+            .call(x_axis)
+
+            svg.append("g")
+                .attr("class","y axis")
+                .attr("transform","translate(" + margin + ",0)")
+                .call(y_axis) 
+            
+            svg.append("text")
+                .attr("x", (w / 2))             
+                .attr("y",  (margin / 2))
+                .attr("text-anchor", "middle")  
+                .text("Acidentes por tipo de veiculo ")
+                .style("font-size", "18px")
+                .style("font-weight", "bold") 
+                .style("fill", "#333");
+                        
+            svg.selectAll(".axis").style("stroke-width", "3px");
+            svg.selectAll(".axis text").style("font-size", "14px");
+
+            // legenda no eixo X
+            svg.append("text")
+                .attr("transform", "translate(" + (w / 2) + " ," + (h - 20) + ")")
+                .style("text-anchor", "middle")
+                .text("Anos") .style("font-size", "18px") 
+                .style("font-weight", "bold")
+                .style("fill", "#333");
+
+            // legenda no eixo Y
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0)
+                .attr("x", 0 - (h / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text("Número de Acidentes")
+                .style("font-size", "18px") 
+                .style("font-weight", "bold") 
+                .style("fill", "#333");
+
+            const tooltip = d3.select("#chartContainer2").append("div")
+                .attr("class", "tooltip")
+                .style("position", "absolute")
+                .style("opacity", 0)
+                .style("pointer-events", "none")
+                .style("background-color", "white")
+                .style("padding", "10px")
+                .style("border", "1px solid #ccc")
+                .style("border-radius", "5px");
+
+            // Tipos de veiculos
+            let types = ['Ligeiros', 'Pesados', 'Velocipedes', 'Ciclomotores', 'Motociclos', 'Outras'];
+
+            types.forEach(type => {
+                svg.selectAll(`.${type}`)
+                    .data(data)
+                    .join("circle")
+                    .attr("cx", d => x_scale(d.Ano))
+                    .attr("cy", d => y_scale(d[type]))
+                    .attr("r", 4)
+                    .attr("class", type)
+                    .style("fill", colors[type])
+                    .on("mouseover", (event, d) => {
+
+                        const containerRect = document.getElementById("chartContainer2").getBoundingClientRect();
+                        const xPosition = event.pageX - containerRect.left; 
+                        const yPosition = event.pageY - containerRect.top+350;
+
+                        tooltip.transition()
+                            .duration(200)
+                            .style("opacity", 0.9);
+
+                        tooltip.html(`${type} em ${d.Ano}: ${d[type]}`)
+                            .style("left", xPosition + "px")
+                            .style("top", yPosition + "px");
+                    })
+                    .on("mouseout", () => {
+                        tooltip.transition()
+                            .duration(500)
+                            .style("opacity", 0);
+                    });
+
+                let line = d3.line()
+                    .x(d => x_scale(d.Ano))
+                    .y(d => y_scale(d[type]));
+
+                svg.append("path")
+                    .attr("d", line(data))
+                    .attr("class", type)
+                    .style("stroke", colors[type])
+                    .style("fill", "none");
+            });
+        }      
+    </script>
+
+</body>

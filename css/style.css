@@ -1,0 +1,670 @@
+/********** Template CSS **********/
+:root {
+    --primary: #1b6a03;
+    --light: #F5F5F5;
+    --dark: #353535;
+}
+
+.fw-medium {
+    font-weight: 500 !important;
+}
+
+.fw-bold {
+    font-weight: 700 !important;
+}
+
+.fw-black {
+    font-weight: 900 !important;
+}
+
+.back-to-top {
+    position: fixed;
+    display: none;
+    right: 45px;
+    bottom: 45px;
+    z-index: 99;
+}
+
+
+/*** Spinner ***/
+#spinner {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .5s ease-out, visibility 0s linear .5s;
+    z-index: 99999;
+}
+
+#spinner.show {
+    transition: opacity .5s ease-out, visibility 0s linear 0s;
+    visibility: visible;
+    opacity: 1;
+}
+
+
+/*** Button ***/
+.btn {
+    font-weight: 500;
+    transition: .5s;
+}
+
+.btn.btn-primary,
+.btn.btn-secondary {
+    color: #FFFFFF;
+}
+
+.btn-square {
+    width: 38px;
+    height: 38px;
+}
+
+.btn-sm-square {
+    width: 32px;
+    height: 32px;
+}
+
+.btn-lg-square {
+    width: 48px;
+    height: 48px;
+}
+
+.btn-square,
+.btn-sm-square,
+.btn-lg-square {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: normal;
+}
+
+/*** Navbar ***/
+.navbar .dropdown-toggle::after {
+    border: none;
+    content: "\f107";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    vertical-align: middle;
+    margin-left: 8px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    margin-right: 30px;
+    padding: 25px 0;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+    outline: none;
+}
+
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link.active {
+    color: var(--primary);
+}
+
+@media (max-width: 991.98px) {
+    .navbar-light .navbar-nav .nav-link  {
+        margin-right: 0;
+        padding: 10px 0;
+    }
+
+    .navbar-light .navbar-nav {
+        border-top: 1px solid #EEEEEE;
+    }
+}
+
+.navbar-light .navbar-brand,
+.navbar-light a.btn {
+    height: 75px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: var(--dark);
+    font-weight: 500;
+}
+
+.navbar-light.sticky-top {
+    top: -100px;
+    transition: .5s;
+}
+
+@media (min-width: 992px) {
+    .navbar .nav-item .dropdown-menu {
+        display: block;
+        border: none;
+        margin-top: 0;
+        top: 150%;
+        opacity: 0;
+        visibility: hidden;
+        transition: .5s;
+    }
+
+    .navbar .nav-item:hover .dropdown-menu {
+        top: 100%;
+        visibility: visible;
+        transition: .5s;
+        opacity: 1;
+    }
+}
+
+
+/*** Header ***/
+@media (max-width: 768px) {
+    .header-carousel .owl-carousel-item {
+        position: relative;
+        min-height: 500px;
+    }
+    
+    .header-carousel .owl-carousel-item img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .header-carousel .owl-carousel-item h5,
+    .header-carousel .owl-carousel-item p {
+        font-size: 14px !important;
+        font-weight: 400 !important;
+    }
+
+    .header-carousel .owl-carousel-item h1 {
+        font-size: 30px;
+        font-weight: 600;
+    }
+}
+
+.header-carousel .owl-nav {
+    position: absolute;
+    width: 200px;
+    height: 45px;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-carousel .owl-nav .owl-prev,
+.header-carousel .owl-nav .owl-next {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    background: transparent;
+    border: 1px solid #FFFFFF;
+    font-size: 22px;
+    transition: .5s;
+}
+
+.header-carousel .owl-nav .owl-prev:hover,
+.header-carousel .owl-nav .owl-next:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.header-carousel .owl-dots {
+    position: absolute;
+    height: 45px;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-carousel .owl-dot {
+    position: relative;
+    display: inline-block;
+    margin: 0 5px;
+    width: 15px;
+    height: 15px;
+    background: transparent;
+    border: 1px solid #FFFFFF;
+    transition: .5s;
+}
+
+.header-carousel .owl-dot::after {
+    position: absolute;
+    content: "";
+    width: 5px;
+    height: 5px;
+    top: 4px;
+    left: 4px;
+    background: transparent;
+    border: 1px solid #FFFFFF;
+}
+
+.header-carousel .owl-dot.active {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.page-header {
+    background: linear-gradient(rgba(53, 53, 53, .7), rgba(53, 53, 53, .7)), url(../img/carousel-1.jpg) center center no-repeat;
+    background-size: cover;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: var(--light);
+}
+
+
+/*** Section Title ***/
+.section-title h1 {
+    position: relative;
+    display: inline-block;
+    padding: 0 60px;
+}
+
+.section-title.text-start h1 {
+    padding-left: 0;
+}
+
+.section-title h1::before,
+.section-title h1::after {
+    position: absolute;
+    content: "";
+    width: 45px;
+    height: 5px;
+    bottom: 0;
+    background: var(--dark);
+}
+
+.section-title h1::before {
+    left: 0;
+}
+
+.section-title h1::after {
+    right: 0;
+}
+
+.section-title.text-start h1::before {
+    display: none;
+}
+
+
+/*** Acidentes por Regioes em portugal ***/
+
+#chartContainer4{
+    margin-top: -130px;
+    margin-left: -560px;
+    overflow: auto;    
+}
+
+.map-container {
+    position: relative;
+    display: flex;
+    z-index: 1;
+}
+
+#chartContainerNovo {
+    margin-top: 15%;
+    margin-left: 54%; /* Ajuste conforme necessário */
+    overflow: auto;
+    position: absolute; /* Usar position absolute para evitar interferências */
+}
+
+
+
+
+
+/*** ACIDENTES POR TIPO DE VIA***/
+/* Adiciona estilos para centralizar o gráfico */
+:root{
+    
+    --Total_color: royalblue; /* para os valores totais */
+
+    --Arruamento_color:lightgreen;  /* para os arruamentos*/
+    
+    --autoestrada_color:rgb(0, 57, 114);       /* para as autoestradas*/
+
+    --Emunicipal_color:darkorange;       /* para as estradas municipais*/
+        
+    --Enacional_color:orangered; /* para as estradas nacionais*/
+
+    --IPIC_color:mediumvioletred;    /* para as ips e ics*/
+
+    --Outras_color:rgb(20, 220, 210);/* para as outras*/
+
+    --Vligeiros_color: lightgreen; /* para os valores totais */
+
+    --Vpesados_color:rgb(0,57,114);  /* para os arruamentos*/
+    
+    --velocipedes_color:darkorange;       /* para as autoestradas*/
+
+    --ciclomotores_color:orangered;       /* para as estradas municipais*/
+        
+    --motrociclos_color:mediumvioletred; /* para as estradas nacionais*/
+}
+
+.circular-border {
+    border-radius: 12px;
+    border: 3px solid #1b6a03; /* Cor e espessura da borda */
+    width: 60%; /* Largura do círculo */
+    margin: 0 auto; /* Centraliza o círculo horizontalmente */
+    padding: 0px; /* Espaçamento interno */
+}
+        
+/* para os arruamentos*/
+path.Arruamento{
+    stroke:var(--Arruamento_color);
+    stroke-width: 2px;
+    fill:none;
+
+}
+circle.Arruamento{
+    fill: var(--Arruamento_color);
+    opacity: 0.6;
+
+}
+/* para as autoestradas*/
+path.Autoestrada{
+    stroke:var(--autoestrada_color);
+    stroke-width: 2px;
+    fill:none;
+}
+circle.Autoestrada{
+    fill: var(--autoestrada_color);
+    opacity: 0.6;
+}
+
+/* para as estradas municipais*/
+path.EMunicipal{
+    stroke:var(--Emunicipal_color);
+    stroke-width: 2px;
+    fill:none;
+}
+circle.Municipal{
+    fill: var(--Emunicipal_color);
+    opacity: 0.6;
+}
+
+/* para as estradas nacionais*/
+path.ENacional{
+    stroke:var(--Enacional_color);
+    stroke-width: 2px;
+    fill:none;
+}
+circle.Nacional{
+    fill: var(--Enacional_color);
+    opacity: 0.6;
+}
+/* para as ips e ics*/
+path.IPIC{
+    stroke:var(--IPIC_color);
+    stroke-width: 2px;
+    fill:none;
+}
+circle.IPIC{
+    fill: var(--IPIC_color);
+    opacity: 0.6;
+}
+/* para as outras*/
+path.Outras_vias{
+    stroke:var(--Outras_color);
+    stroke-width: 2px;
+    fill:none;
+}
+circle.Outras_vias{
+    fill: var(--Outras_color);
+    opacity: 0.6;
+}
+
+
+/* Para os Veículos */
+path.Vligeiros {
+    stroke: var(--Vligeiros_color);
+    stroke-width: 2px;
+    fill: none;
+}
+circle.Vligeiros {
+    fill: var(--Vligeiros_color);
+    opacity: 0.6;
+}
+
+/* para os Vpesados */
+path.Vpesados {
+    stroke: var(--Vpesados_color);
+    stroke-width: 2px;
+    fill: none;
+}
+circle.Vpesados {
+    fill: var(--Vpesados_color);
+    opacity: 0.6;
+}
+
+/* para os velocipedes */
+path.velocipedes {
+    stroke: var(--velocipedes_color);
+    stroke-width: 2px;
+    fill: none;
+}
+circle.velocipedes {
+    fill: var(--velocipedes_color);
+    opacity: 0.6;
+}
+
+/* para os ciclomotores */
+path.ciclomotores {
+    stroke: var(--ciclomotores_color);
+    stroke-width: 2px;
+    fill: none;
+}
+circle.ciclomotores {
+    fill: var(--ciclomotores_color);
+    opacity: 0.6;
+}
+
+/* para os motrociclos */
+path.motrociclos {
+    stroke: var(--motrociclos_color);
+    stroke-width: 2px;
+    fill: none;
+}
+circle.motrociclos {
+    fill: var(--motrociclos_color);
+    opacity: 0.6;
+}
+
+/* para as Outras_vias */
+path.Outras_vias {
+    stroke: var(--Outras_color);
+    stroke-width: 2px;
+    fill: none;
+}
+circle.Outras_vias {
+    fill: var(--Outras_color);
+    opacity: 0.6;
+}
+
+#legendContainer2{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60%;
+    right: -25px;
+
+}
+
+#legendContainer {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 27%;
+    right: 20px;
+}
+
+.legend-item {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.legend-color {
+    width: 18px;
+    height: 18px;
+    margin-right: 5px;
+}
+
+.pie-chart {
+    position: absolute;
+    right: 90px; /* Ajuste a posição conforme necessário */
+    top: 380px; /* Ajuste a posição conforme necessário */
+}
+
+
+.chart-container {
+    position: relative;
+}
+
+
+#chartContainer {
+    margin-top: 200px; /* Ajuste a margem superior conforme necessário */
+    margin-left: 250px;
+}
+
+#chartContainer2{
+    margin-top: 70px;
+    margin-left: 30px;
+    overflow: auto;
+    height: 600px; /* Adjust the height as needed */
+}
+
+#yearFilter {
+    position: absolute;
+    top: 20%;
+    left: -2%;
+    transform: translate(0, -40%);
+    width: 110px; /* Largura do filtro */
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.radio-row {
+    margin-bottom: 8px;
+}
+
+label {
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 16px; /* Tamanho de fonte maior para 2007 e 2008 */
+    font-weight: bold; /* Texto em negrito para 2007 e 2008 */
+    color: #333; /* Cor mais escura para 2007 e 2008 */
+}
+
+input {
+    margin-left: 7px;
+}
+
+/* Estilo para quando o mouse passa por cima */
+label:hover {
+    background-color: #e0e0e0;
+}
+
+
+
+/*** ACIDENTES EM PORTUGAL ***/
+.acidentes_portugal {
+    padding-top: 50px; /* Adjust the padding-top value to increase the spacing */
+  }
+
+#chartContainer3{
+    margin-top: 40px;
+    margin-left: 60px;
+    overflow: auto;    
+}
+
+/* Estilos para a linha do gráfico */
+path.Total {
+    fill: none; /* Define que a linha não terá preenchimento */
+    stroke: rgb(108, 180, 86); /* Cor da linha (substitua pela cor desejada) */
+    stroke-width: 2; /* Largura da linha */
+}
+
+/* Estilos para os pontos do gráfico */
+circle.Total {
+    fill: rgb(108, 180, 86); /* Cor dos pontos (substitua pela cor desejada) */
+    stroke: none; /* Remove a borda dos pontos */
+}
+
+.smaller-text {
+    font-size: 17px; /* Ajuste o tamanho conforme desejado */
+}
+
+.color{
+    margin-bottom: 1.5rem;
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 2em;
+    color: rgb(27, 106, 3); 
+}
+
+
+
+
+
+/*** Footer ***/
+.footer {
+    background: linear-gradient(rgba(53, 53, 53, .7), rgba(53, 53, 53, .7)), url(../img/footer.jpg) center center no-repeat;
+    background-size: cover;
+}
+
+.footer .btn.btn-social {
+    margin-right: 5px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--light);
+    border: 1px solid #FFFFFF;
+    transition: .3s;
+}
+
+.footer .btn.btn-social:hover {
+    color: var(--primary);
+}
+
+.footer .btn.btn-link {
+    display: block;
+    margin-bottom: 5px;
+    padding: 0;
+    text-align: left;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: normal;
+    text-transform: capitalize;
+    transition: .3s;
+}
+
+.footer .btn.btn-link::before {
+    position: relative;
+    content: "\f105";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 10px;
+}
+
+.footer .btn.btn-link:hover {
+    color: var(--primary);
+    letter-spacing: 1px;
+    box-shadow: none;
+}
+
+.footer .copyright {
+    padding: 25px 0;
+    font-size: 15px;
+    border-top: 1px solid rgba(256, 256, 256, .1);
+}
+
+.footer .copyright a {
+    color: var(--light);
+}
+
+.footer .copyright a:hover {
+    color: var(--primary);
+}
